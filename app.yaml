@@ -1,0 +1,14 @@
+kind: wasmer.io/App.v0
+name: Little-doctors-C14
+owner: rakeshreddyyerra07
+package: .
+app_id: da_nzrI7tJUbYyQ
+annotations:
+  anybuild.run/config:
+    composer_enable: true
+    name: out
+    php_public_dir: public
+    phpix: true
+  anybuild.run/provider: php
+  anybuild.run/version: 0.32.0
+  wasmer.io/version: 7.5.0
