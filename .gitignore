@@ -1,6 +1,10 @@
 .env
 /vendor/
-/writable/cache/
-/writable/logs/
-/writable/session/
-/writable/debugbar/
+/writable/cache/*
+!/writable/cache/.gitkeep
+/writable/logs/*
+!/writable/logs/.gitkeep
+/writable/session/*
+!/writable/session/.gitkeep
+/writable/debugbar/*
+!/writable/debugbar/.gitkeep
