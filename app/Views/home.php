@@ -111,7 +111,7 @@
 
 
 /* =========================================================
-   CAMP PHOTOS (only addition)
+   CAMP PHOTOS
 ========================================================= */
 
 .camp-photo {
@@ -130,6 +130,22 @@
 .camp-photo .camp-tag {
     position: absolute;
     z-index: 2;
+}
+
+
+/* =========================================================
+   TESTIMONIAL PHOTOS (new)
+========================================================= */
+
+.test-who .t-photo {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+    background: #e2e8f0;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
 }
 
 </style>
@@ -461,7 +477,7 @@
 
 
 <!-- =========================================================
-     CAMPS  (3 photos added here)
+     CAMPS
 ========================================================= -->
 
 <section class="camps" id="camps">
@@ -615,7 +631,7 @@
 
 
 <!-- =========================================================
-     STORIES
+     STORIES  (photos added here)
 ========================================================= -->
 
 <section class="testimonials" id="stories">
@@ -632,7 +648,7 @@
         <div class="stars">★★★★★</div>
         <p>"I love Little Doctors because I learn so many new things about the human body in a fun way!"</p>
         <div class="test-who">
-          <span class="av" style="background:var(--pink)">N</span>
+          <img class="t-photo" src="<?= base_url('assets/images/t-1.png') ?>" alt="Neha">
           Neha, Age 10
         </div>
       </div>
@@ -641,7 +657,7 @@
         <div class="stars">★★★★★</div>
         <p>"The activities and games are awesome! I now know how my heart works."</p>
         <div class="test-who">
-          <span class="av" style="background:var(--teal)">A</span>
+          <img class="t-photo" src="<?= base_url('assets/images/t-2.png') ?>" alt="Aarav">
           Aarav, Age 9
         </div>
       </div>
@@ -650,7 +666,7 @@
         <div class="stars">★★★★★</div>
         <p>"It's the best camp ever! I want to be a doctor when I grow up."</p>
         <div class="test-who">
-          <span class="av" style="background:var(--purple)">D</span>
+          <img class="t-photo" src="<?= base_url('assets/images/t-3.png') ?>" alt="Diya">
           Diya, Age 11
         </div>
       </div>
