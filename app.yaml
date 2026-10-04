@@ -10,7 +10,7 @@ annotations:
     php_public_dir: public
     phpix: true
   anybuild.run/provider: php
-  anybuild.run/version: 0.32.0
+  anybuild.run/version: 0.32.2
   wasmer.io/version: 7.5.0
 enableDatabase: true
 env:
