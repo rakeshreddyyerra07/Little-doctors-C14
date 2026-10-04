@@ -13,7 +13,6 @@ annotations:
   anybuild.run/version: 0.32.0
   wasmer.io/version: 7.5.0
 enableDatabase: true
-
 env:
   PHPIX_PHP_THREADS: "4"
   CI_ENVIRONMENT: development

@@ -39,6 +39,18 @@ if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
 
 /*
  *---------------------------------------------------------------
+ * CREATE WRITABLE TEMP FOLDERS (app folder is read-only on Wasmer)
+ *---------------------------------------------------------------
+ */
+
+foreach (['/tmp/ci4-cache', '/tmp/ci4-session', '/tmp/ci4-logs'] as $dir) {
+    if (! is_dir($dir)) {
+        @mkdir($dir, 0775, true);
+    }
+}
+
+/*
+ *---------------------------------------------------------------
  * BOOTSTRAP THE APPLICATION
  *---------------------------------------------------------------
  * This process sets up the path constants, loads and registers
