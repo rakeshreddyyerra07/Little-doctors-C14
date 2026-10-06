@@ -148,6 +148,77 @@
     box-shadow: 0 2px 6px rgba(0,0,0,.15);
 }
 
+
+/* =========================================================
+   HERO ART - MATCH PROTOTYPE (new, appended)
+   Light-blue circle behind the kids, kids shown uncropped
+   (not clipped into a circle), 4 floating icon badges.
+   Desktop only; mobile rules above are untouched.
+========================================================= */
+
+@media (min-width: 801px) {
+
+    .hero-art {
+        justify-content: center !important;
+        transform: translateX(-20px) !important;
+        min-height: 540px !important;
+    }
+
+    /* light-blue circle behind the kids */
+    .hero-art .blob {
+        width: 400px !important;
+        height: 400px !important;
+        top: 50% !important;
+        left: 50% !important;
+        right: auto !important;
+        bottom: auto !important;
+        margin: -215px 0 0 -170px !important;
+        border-radius: 50% !important;
+        background: radial-gradient(circle at 40% 35%, #d6ebff 0%, #bde0ff 55%, #a9d6fb 100%) !important;
+        opacity: 1 !important;
+    }
+
+    /* kids picture: no circular crop, natural shape, soft shadow */
+    .hero-art .hero-photo {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 520px !important;
+        max-height: none !important;
+        border-radius: 0 !important;
+        object-fit: contain !important;
+        filter: drop-shadow(0 16px 22px rgba(20, 60, 120, .16));
+    }
+
+    /* floating icon badges */
+    .hero-art .badge {
+        width: 54px !important;
+        height: 54px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border-radius: 50% !important;
+        animation: heroFloat 5s ease-in-out infinite;
+    }
+
+    .hero-art .badge svg {
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    .hero-art .badge.b1 { top: 9% !important;  left: 6% !important;  right: auto !important; bottom: auto !important; }
+    .hero-art .badge.b2 { top: 6% !important;  left: 52% !important; right: auto !important; bottom: auto !important; animation-delay: .8s; }
+    .hero-art .badge.b3 { top: 5% !important;  right: 4% !important; left: auto !important;  bottom: auto !important; animation-delay: 1.6s; }
+    .hero-art .badge.b4 { top: 34% !important; right: 0 !important;  left: auto !important;  bottom: auto !important; animation-delay: 2.4s; }
+
+    @keyframes heroFloat {
+        0%, 100% { transform: translateY(0); }
+        50%      { transform: translateY(-8px); }
+    }
+
+}
+
 </style>
 
 
