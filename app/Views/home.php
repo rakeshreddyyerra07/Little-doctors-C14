@@ -220,28 +220,39 @@
 }
 
 /* =========================================================
-   HERO - REMOVE DUPLICATE CIRCLE (new, appended)
-   hero-kids.png already contains its own circle, so the
-   extra blob behind it is hidden on desktop.
+   HERO - SHOW IMAGE EXACTLY AS DESIGNED (new, appended)
+   hero-kids.png already contains its own circle + icons,
+   so show it as-is: no crop, no filter, no extra circle,
+   no extra badges. Higher specificity than the rules above.
 ========================================================= */
 
+.hero .hero-art .blob,
+.hero .hero-art .badge {
+    display: none !important;
+}
+
+.hero .hero-art .hero-photo {
+    width: 100% !important;
+    height: auto !important;
+    max-width: min(520px, 100%) !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    border-radius: 0 !important;
+    object-fit: contain !important;
+    filter: none !important;
+    box-shadow: none !important;
+    clip-path: none !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+    mix-blend-mode: normal !important;
+}
+
 @media (min-width: 801px) {
-
-    /* new hero-kids.png already has its own circle + icons */
-    .hero-art .blob,
-    .hero-art .badge {
-        display: none !important;
+    .hero .hero-art {
+        justify-content: center !important;
+        transform: translateX(-20px) !important;
+        min-height: 540px !important;
     }
-
-    .hero-art .hero-photo {
-        width: 100% !important;
-        height: auto !important;
-        max-width: 520px !important;
-        max-height: none !important;
-        border-radius: 0 !important;
-        filter: drop-shadow(0 18px 26px rgba(20, 60, 120, .14));
-    }
-
 }
 
 </style>
@@ -340,7 +351,7 @@
       <div class="blob"></div>
 
       <img
-        src="<?= base_url('assets/images/hero-kids.png') ?>"
+        src="<?= base_url('assets/images/hero-kids.png') ?>?v=2"
         alt="Four kids in lab coats with stethoscopes and a teddy bear"
         class="hero-photo"
       >
