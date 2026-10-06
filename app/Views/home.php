@@ -255,6 +255,45 @@
     }
 }
 
+/* =========================================================
+   HERO - REMOVE TOP SPACE + BIGGER IMAGE AT TOP (new, appended)
+   Desktop only. Image starts at the top of the hero (no empty
+   band under the header) and gets more room to grow.
+========================================================= */
+
+@media (min-width: 801px) {
+
+    .hero {
+        padding-top: 10px !important;
+        padding-bottom: 30px !important;
+    }
+
+    .hero > .wrap {
+        grid-template-columns: 0.85fr 1.15fr !important;
+        align-items: start !important;
+        padding-top: 0 !important;
+    }
+
+    /* text sits a little lower so it balances with the bigger image */
+    .hero > .wrap > div:first-child {
+        padding-top: 70px !important;
+    }
+
+    .hero .hero-art {
+        align-items: flex-start !important;
+        justify-content: center !important;
+        min-height: 0 !important;
+        margin-top: 0 !important;
+        transform: none !important;
+    }
+
+    .hero .hero-art .hero-photo {
+        max-width: min(760px, 100%) !important;
+        margin-top: 0 !important;
+    }
+
+}
+
 </style>
 
 
