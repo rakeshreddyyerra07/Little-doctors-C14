@@ -219,6 +219,25 @@
 
 }
 
+/* =========================================================
+   HERO - REMOVE DUPLICATE CIRCLE (new, appended)
+   hero-kids.png already contains its own circle, so the
+   extra blob behind it is hidden on desktop.
+========================================================= */
+
+@media (min-width: 801px) {
+
+    .hero-art .blob {
+        display: none !important;
+    }
+
+    .hero-art .hero-photo {
+        max-width: 540px !important;
+        filter: drop-shadow(0 18px 26px rgba(20, 60, 120, .14));
+    }
+
+}
+
 </style>
 
 
