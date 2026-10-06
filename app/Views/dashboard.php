@@ -1,38 +1,37 @@
+
 <?= $this->extend('layout/main') ?>
 <?= $this->section('content') ?>
 
 <style>
-
 /* =========================================================
    DASHBOARD
    Only affects the dashboard page.
 ========================================================= */
 
 .dash-page {
-    --d-navy:   var(--navy, #12285c);
-    --d-teal:   var(--teal, #17b39b);
-    --d-coral:  var(--coral, #f45b36);
+    --d-navy: var(--navy, #12285c);
+    --d-teal: var(--teal, #17b39b);
+    --d-coral: var(--coral, #f45b36);
     --d-purple: var(--purple, #8b6cf0);
     --d-yellow: var(--yellow, #f7b731);
-    --d-pink:   var(--pink, #ec4f78);
-    --d-green:  var(--green, #34b36b);
-    --d-text:   #5b6b86;
+    --d-pink: var(--pink, #ec4f78);
+    --d-green: var(--green, #34b36b);
+    --d-text: #5b6b86;
 
     position: relative;
     min-height: 100vh;
     overflow: hidden;
     padding-bottom: 70px;
 
-    /* background: soft gradient + dotted pattern */
     background:
-        radial-gradient(circle at 12% 8%,  rgba(23, 179, 155, .22) 0, transparent 38%),
+        radial-gradient(circle at 12% 8%, rgba(23, 179, 155, .22) 0, transparent 38%),
         radial-gradient(circle at 92% 14%, rgba(139, 108, 240, .20) 0, transparent 40%),
         radial-gradient(circle at 80% 92%, rgba(244, 91, 54, .14) 0, transparent 38%),
-        radial-gradient(circle at 6% 88%,  rgba(247, 183, 49, .16) 0, transparent 36%),
+        radial-gradient(circle at 6% 88%, rgba(247, 183, 49, .16) 0, transparent 36%),
         linear-gradient(160deg, #eaf5ff 0%, #f6fbff 45%, #eef9f6 100%);
 }
 
-/* dotted pattern layer */
+/* Dotted pattern layer */
 .dash-page::before {
     content: "";
     position: absolute;
@@ -42,7 +41,7 @@
     pointer-events: none;
 }
 
-/* floating decorative circles */
+/* Floating decorative circles */
 .dash-bubble {
     position: absolute;
     border-radius: 50%;
@@ -50,13 +49,36 @@
     opacity: .55;
     animation: dashFloat 9s ease-in-out infinite;
 }
-.dash-bubble.b1 { width: 160px; height: 160px; top: 140px;  left: -50px;  background: rgba(23,179,155,.16); }
-.dash-bubble.b2 { width: 110px; height: 110px; top: 420px;  right: -30px; background: rgba(139,108,240,.18); animation-delay: 1.5s; }
-.dash-bubble.b3 { width: 80px;  height: 80px;  bottom: 120px; left: 8%;   background: rgba(247,183,49,.22); animation-delay: 3s; }
+
+.dash-bubble.b1 {
+    width: 160px;
+    height: 160px;
+    top: 140px;
+    left: -50px;
+    background: rgba(23, 179, 155, .16);
+}
+
+.dash-bubble.b2 {
+    width: 110px;
+    height: 110px;
+    top: 420px;
+    right: -30px;
+    background: rgba(139, 108, 240, .18);
+    animation-delay: 1.5s;
+}
+
+.dash-bubble.b3 {
+    width: 80px;
+    height: 80px;
+    bottom: 120px;
+    left: 8%;
+    background: rgba(247, 183, 49, .22);
+    animation-delay: 3s;
+}
 
 @keyframes dashFloat {
     0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-16px); }
+    50% { transform: translateY(-16px); }
 }
 
 .dash-inner {
@@ -66,7 +88,6 @@
     margin: 0 auto;
     padding: 0 22px;
 }
-
 
 /* ---------- TOP BAR ---------- */
 
@@ -78,10 +99,12 @@
     padding: 18px 0;
 }
 
+/* UPDATED LOGO: wider and shorter */
 .dash-bar img {
-    width: 280px;
+    width: 340px;
     max-width: 100%;
-    height: auto;
+    height: 105px;
+    object-fit: fill;
     display: block;
 }
 
@@ -116,7 +139,6 @@
     font-weight: 800;
     background: linear-gradient(135deg, var(--d-teal), var(--d-purple));
 }
-
 
 /* ---------- HERO ---------- */
 
@@ -191,7 +213,10 @@
     cursor: pointer;
     transition: transform .15s ease, box-shadow .15s ease;
 }
-.dash-btn:hover { transform: translateY(-2px); }
+
+.dash-btn:hover {
+    transform: translateY(-2px);
+}
 
 .dash-btn.primary {
     background: var(--d-coral);
@@ -215,7 +240,6 @@
     color: var(--d-navy);
     border-color: var(--d-navy);
 }
-
 
 /* ---------- STATS ---------- */
 
@@ -260,7 +284,6 @@
     color: var(--d-text);
 }
 
-
 /* ---------- SECTION TITLES ---------- */
 
 .dash-title {
@@ -268,7 +291,6 @@
     font-size: 24px;
     color: var(--d-navy);
 }
-
 
 /* ---------- ACTION CARDS ---------- */
 
@@ -292,8 +314,13 @@
     box-shadow: 0 16px 34px rgba(18, 40, 92, .13);
 }
 
-.dcard.c2 { border-top-color: var(--d-coral); }
-.dcard.c3 { border-top-color: var(--d-purple); }
+.dcard.c2 {
+    border-top-color: var(--d-coral);
+}
+
+.dcard.c3 {
+    border-top-color: var(--d-purple);
+}
 
 .dcard .ico {
     width: 56px;
@@ -317,7 +344,6 @@
     color: var(--d-text);
     line-height: 1.5;
 }
-
 
 /* ---------- TWO COLUMN AREA ---------- */
 
@@ -347,7 +373,10 @@
     padding: 14px 0;
     border-bottom: 1px dashed #d9e3f1;
 }
-.camp-row:last-child { border-bottom: 0; }
+
+.camp-row:last-child {
+    border-bottom: 0;
+}
 
 .camp-date {
     width: 58px;
@@ -360,10 +389,23 @@
     font-weight: 800;
     line-height: 1.1;
 }
-.camp-date small { display: block; font-size: 11px; color: var(--d-text); font-weight: 700; }
 
-.camp-info b    { display: block; color: var(--d-navy); }
-.camp-info span { font-size: 13px; color: var(--d-text); }
+.camp-date small {
+    display: block;
+    font-size: 11px;
+    color: var(--d-text);
+    font-weight: 700;
+}
+
+.camp-info b {
+    display: block;
+    color: var(--d-navy);
+}
+
+.camp-info span {
+    font-size: 13px;
+    color: var(--d-text);
+}
 
 .profile-line {
     display: flex;
@@ -373,10 +415,20 @@
     border-bottom: 1px dashed #d9e3f1;
     font-size: 15px;
 }
-.profile-line:last-child { border-bottom: 0; }
-.profile-line span { color: var(--d-text); }
-.profile-line b    { color: var(--d-navy); word-break: break-all; text-align: right; }
 
+.profile-line:last-child {
+    border-bottom: 0;
+}
+
+.profile-line span {
+    color: var(--d-text);
+}
+
+.profile-line b {
+    color: var(--d-navy);
+    word-break: break-all;
+    text-align: right;
+}
 
 /* ---------- TEMPORARY SESSION BOX ---------- */
 
@@ -402,7 +454,6 @@
     color: #243556;
 }
 
-
 /* ---------- FLASH MESSAGE ---------- */
 
 .dash-flash {
@@ -416,208 +467,318 @@
     font-weight: 700;
 }
 
-
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 960px) {
-    .dash-stats { grid-template-columns: repeat(2, 1fr); }
-    .dash-cards { grid-template-columns: 1fr; }
-    .dash-two   { grid-template-columns: 1fr; }
+    .dash-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dash-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .dash-two {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 560px) {
-    .dash-bar img   { width: 190px; }
-    .dash-hero      { padding: 28px 22px; }
-    .dash-hero h1   { font-size: 28px; }
-    .dash-stats     { grid-template-columns: 1fr; }
-    .dash-user span { display: none; }
-    .dash-user      { padding: 6px; }
+    /* UPDATED MOBILE LOGO */
+    .dash-bar img {
+        width: 220px;
+        max-width: 100%;
+        height: 75px;
+        object-fit: fill;
+    }
+
+    .dash-hero {
+        padding: 28px 22px;
+    }
+
+    .dash-hero h1 {
+        font-size: 28px;
+    }
+
+    .dash-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .dash-user span {
+        display: none;
+    }
+
+    .dash-user {
+        padding: 6px;
+    }
 }
-
 </style>
-
 
 <div class="dash-page">
 
-  <span class="dash-bubble b1"></span>
-  <span class="dash-bubble b2"></span>
-  <span class="dash-bubble b3"></span>
+    <span class="dash-bubble b1"></span>
+    <span class="dash-bubble b2"></span>
+    <span class="dash-bubble b3"></span>
 
-  <div class="dash-inner">
+    <div class="dash-inner">
 
-    <!-- TOP BAR -->
-    <div class="dash-bar">
+        <!-- TOP BAR -->
+        <div class="dash-bar">
 
-      <a href="<?= base_url('/') ?>">
-        <img src="<?= base_url('assets/images/logo.png') ?>" alt="Little Doctors logo">
-      </a>
+            <a href="<?= base_url('/') ?>">
+                <img
+                    src="<?= base_url('assets/images/logo.png') ?>"
+                    alt="Little Doctors logo"
+                >
+            </a>
 
-      <div class="dash-bar-right">
+            <div class="dash-bar-right">
 
-        <div class="dash-user">
-          <div class="dash-avatar"><?= esc(strtoupper(substr((string) $userName, 0, 1))) ?></div>
-          <span><?= esc($userName) ?></span>
-        </div>
+                <div class="dash-user">
+                    <div class="dash-avatar">
+                        <?= esc(strtoupper(substr((string) $userName, 0, 1))) ?>
+                    </div>
 
-        <a class="dash-btn line" href="<?= base_url('/') ?>">Home</a>
-        <a class="dash-btn dark" href="<?= base_url('logout') ?>">Logout</a>
+                    <span><?= esc($userName) ?></span>
+                </div>
 
-      </div>
+                <a class="dash-btn line" href="<?= base_url('/') ?>">
+                    Home
+                </a>
 
-    </div>
+                <a class="dash-btn dark" href="<?= base_url('logout') ?>">
+                    Logout
+                </a>
 
-
-    <!-- SUCCESS MESSAGE -->
-    <?php if (session()->getFlashdata('success')): ?>
-      <div class="dash-flash">✅ <?= esc(session()->getFlashdata('success')) ?></div>
-    <?php endif; ?>
-
-
-    <!-- HERO -->
-    <div class="dash-hero">
-
-      <h1>Welcome back, <?= esc($userName) ?>! 👋</h1>
-      <p>Ready for your next adventure? Explore camps, enroll your child and help them grow into a Little Doctor.</p>
-
-      <div class="hero-actions">
-        <a class="dash-btn primary" href="<?= base_url('enroll') ?>">Enroll Now →</a>
-        <a class="dash-btn ghost" href="<?= base_url('/#camps') ?>">Explore Camps</a>
-      </div>
-
-    </div>
-
-
-    <!-- STATS -->
-    <div class="dash-stats">
-
-      <div class="stat">
-        <div class="ico" style="background:#e3faf3">🎓</div>
-        <div><b><?= count($enrollments) ?></b><span>Enrollments</span></div>
-      </div>
-
-      <div class="stat">
-        <div class="ico" style="background:#fff3de">⭐</div>
-        <div><b>0</b><span>Badges earned</span></div>
-      </div>
-
-      <div class="stat">
-        <div class="ico" style="background:#f2eefc">📅</div>
-        <div><b>3</b><span>Upcoming camps</span></div>
-      </div>
-
-      <div class="stat">
-        <div class="ico" style="background:#ffe7ec">🧸</div>
-        <div><b>10,000+</b><span>Little Doctors</span></div>
-      </div>
-
-    </div>
-
-
-    <!-- QUICK ACTIONS -->
-    <h2 class="dash-title">Quick actions</h2>
-
-    <div class="dash-cards">
-
-      <div class="dcard">
-        <div class="ico" style="background:#e3faf3">📝</div>
-        <h3>Camp Enrollment</h3>
-        <p>Enroll your child in a Little Doctors camp or course.</p>
-        <a class="dash-btn dark" href="<?= base_url('enroll') ?>">Enroll Now</a>
-      </div>
-
-      <div class="dcard c2">
-        <div class="ico" style="background:#ffe7e2">🏕️</div>
-        <h3>Explore Camps</h3>
-        <p>See upcoming summer camps and weekend workshops near you.</p>
-        <a class="dash-btn line" href="<?= base_url('/#camps') ?>">View Camps</a>
-      </div>
-
-      <div class="dcard c3">
-        <div class="ico" style="background:#f2eefc">🧠</div>
-        <h3>Learning Lab</h3>
-        <p>Brain, heart, lungs, bones and nutrition - learn through fun topics.</p>
-        <a class="dash-btn line" href="<?= base_url('/#lab') ?>">Start Learning</a>
-      </div>
-
-    </div>
-
-
-    <!-- CAMPS + PROFILE -->
-    <h2 class="dash-title">Your overview</h2>
-
-    <div class="dash-two">
-
-      <div class="panel">
-        <h3>Upcoming camps</h3>
-
-        <div class="camp-row">
-          <div class="camp-date"><small>JUN</small>15</div>
-          <div class="camp-info">
-            <b>Little Doctors Camp</b>
-            <span>Boston, MA &bull; Ages 8 - 14</span>
-          </div>
-        </div>
-
-        <div class="camp-row">
-          <div class="camp-date"><small>JUL</small>12</div>
-          <div class="camp-info">
-            <b>Heart &amp; Health Workshop</b>
-            <span>New York, NY &bull; Ages 7 - 12</span>
-          </div>
-        </div>
-
-        <div class="camp-row">
-          <div class="camp-date"><small>AUG</small>2</div>
-          <div class="camp-info">
-            <b>Human Body Explorer Camp</b>
-            <span>Chicago, IL &bull; Ages 8 - 14</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h3>My profile</h3>
-
-        <div class="profile-line"><span>Name</span><b><?= esc($userName) ?></b></div>
-        <div class="profile-line"><span>Email</span><b><?= esc($userEmail) ?></b></div>
-        <div class="profile-line"><span>Status</span><b style="color:var(--d-green)">Logged in</b></div>
-      </div>
-
-    </div>
-
-
-    <!-- MY ENROLLMENTS -->
-    <h2 class="dash-title">My enrollments</h2>
-
-    <div class="panel">
-
-      <?php if (empty($enrollments)): ?>
-        <p style="margin:0;color:var(--d-text);">
-          No enrollments yet.
-          <a href="<?= base_url('enroll') ?>" style="color:var(--d-coral);font-weight:800;">Enroll your child &rarr;</a>
-        </p>
-      <?php else: ?>
-        <?php foreach ($enrollments as $row): ?>
-          <div class="camp-row">
-            <div class="camp-date"><small>AGE</small><?= (int) $row->child_age ?></div>
-            <div class="camp-info">
-              <b><?= esc($row->child_name) ?></b>
-              <span><?= esc($row->camp) ?></span>
             </div>
-          </div>
-        <?php endforeach; ?>
-      <?php endif; ?>
+        </div>
+
+        <!-- SUCCESS MESSAGE -->
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="dash-flash">
+                ✅ <?= esc(session()->getFlashdata('success')) ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- HERO -->
+        <div class="dash-hero">
+
+            <h1>Welcome back, <?= esc($userName) ?>! 👋</h1>
+
+            <p>
+                Ready for your next adventure? Explore camps, enroll your child
+                and help them grow into a Little Doctor.
+            </p>
+
+            <div class="hero-actions">
+                <a class="dash-btn primary" href="<?= base_url('enroll') ?>">
+                    Enroll Now →
+                </a>
+
+                <a class="dash-btn ghost" href="<?= base_url('/#camps') ?>">
+                    Explore Camps
+                </a>
+            </div>
+
+        </div>
+
+        <!-- STATS -->
+        <div class="dash-stats">
+
+            <div class="stat">
+                <div class="ico" style="background:#e3faf3">🎓</div>
+                <div>
+                    <b><?= count($enrollments) ?></b>
+                    <span>Enrollments</span>
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="ico" style="background:#fff3de">⭐</div>
+                <div>
+                    <b>0</b>
+                    <span>Badges earned</span>
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="ico" style="background:#f2eefc">📅</div>
+                <div>
+                    <b>3</b>
+                    <span>Upcoming camps</span>
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="ico" style="background:#ffe7ec">🧸</div>
+                <div>
+                    <b>10,000+</b>
+                    <span>Little Doctors</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <h2 class="dash-title">Quick actions</h2>
+
+        <div class="dash-cards">
+
+            <div class="dcard">
+                <div class="ico" style="background:#e3faf3">📝</div>
+
+                <h3>Camp Enrollment</h3>
+
+                <p>
+                    Enroll your child in a Little Doctors camp or course.
+                </p>
+
+                <a class="dash-btn dark" href="<?= base_url('enroll') ?>">
+                    Enroll Now
+                </a>
+            </div>
+
+            <div class="dcard c2">
+                <div class="ico" style="background:#ffe7e2">🏕️</div>
+
+                <h3>Explore Camps</h3>
+
+                <p>
+                    See upcoming summer camps and weekend workshops near you.
+                </p>
+
+                <a class="dash-btn line" href="<?= base_url('/#camps') ?>">
+                    View Camps
+                </a>
+            </div>
+
+            <div class="dcard c3">
+                <div class="ico" style="background:#f2eefc">🧠</div>
+
+                <h3>Learning Lab</h3>
+
+                <p>
+                    Brain, heart, lungs, bones and nutrition - learn through fun topics.
+                </p>
+
+                <a class="dash-btn line" href="<?= base_url('/#lab') ?>">
+                    Start Learning
+                </a>
+            </div>
+
+        </div>
+
+        <!-- CAMPS + PROFILE -->
+        <h2 class="dash-title">Your overview</h2>
+
+        <div class="dash-two">
+
+            <div class="panel">
+                <h3>Upcoming camps</h3>
+
+                <div class="camp-row">
+                    <div class="camp-date">
+                        <small>JUN</small>15
+                    </div>
+
+                    <div class="camp-info">
+                        <b>Little Doctors Camp</b>
+                        <span>Boston, MA &bull; Ages 8 - 14</span>
+                    </div>
+                </div>
+
+                <div class="camp-row">
+                    <div class="camp-date">
+                        <small>JUL</small>12
+                    </div>
+
+                    <div class="camp-info">
+                        <b>Heart &amp; Health Workshop</b>
+                        <span>New York, NY &bull; Ages 7 - 12</span>
+                    </div>
+                </div>
+
+                <div class="camp-row">
+                    <div class="camp-date">
+                        <small>AUG</small>2
+                    </div>
+
+                    <div class="camp-info">
+                        <b>Human Body Explorer Camp</b>
+                        <span>Chicago, IL &bull; Ages 8 - 14</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>My profile</h3>
+
+                <div class="profile-line">
+                    <span>Name</span>
+                    <b><?= esc($userName) ?></b>
+                </div>
+
+                <div class="profile-line">
+                    <span>Email</span>
+                    <b><?= esc($userEmail) ?></b>
+                </div>
+
+                <div class="profile-line">
+                    <span>Status</span>
+                    <b style="color:var(--d-green)">Logged in</b>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MY ENROLLMENTS -->
+        <h2 class="dash-title">My enrollments</h2>
+
+        <div class="panel">
+
+            <?php if (empty($enrollments)): ?>
+
+                <p style="margin:0;color:var(--d-text);">
+                    No enrollments yet.
+
+                    <a
+                        href="<?= base_url('enroll') ?>"
+                        style="color:var(--d-coral);font-weight:800;"
+                    >
+                        Enroll your child &rarr;
+                    </a>
+                </p>
+
+            <?php else: ?>
+
+                <?php foreach ($enrollments as $row): ?>
+
+                    <div class="camp-row">
+
+                        <div class="camp-date">
+                            <small>AGE</small><?= (int) $row->child_age ?>
+                        </div>
+
+                        <div class="camp-info">
+                            <b><?= esc($row->child_name) ?></b>
+                            <span><?= esc($row->camp) ?></span>
+                        </div>
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            <?php endif; ?>
+
+        </div>
+
+        <!-- TEMPORARY SESSION BOX -->
+        <details class="session-box">
+            <summary>Session data (temporary - remove later)</summary>
+            <pre><?= esc(print_r($sessionData, true)) ?></pre>
+        </details>
 
     </div>
-
-
-    <!-- TEMPORARY: session data viewer. Remove this block later. -->
-    <details class="session-box">
-      <summary>Session data (temporary - remove later)</summary>
-      <pre><?= esc(print_r($sessionData, true)) ?></pre>
-    </details>
-
-  </div>
 
 </div>
 
