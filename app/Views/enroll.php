@@ -52,8 +52,6 @@
     padding: 18px 0;
 }
 
-.enr-bar img { height: 54px; width: auto; display: block; }
-
 .enr-back {
     display: inline-flex;
     align-items: center;
@@ -161,6 +159,7 @@
     box-shadow: 0 8px 18px rgba(244, 91, 54, .35);
     transition: transform .15s ease;
 }
+
 .enr-submit:hover { transform: translateY(-2px); }
 
 .enr-cancel {
@@ -186,9 +185,6 @@
   <div class="enr-inner">
 
     <div class="enr-bar">
-      <a href="<?= base_url('/') ?>">
-        <img src="<?= base_url('assets/images/logo.png') ?>" alt="Little Doctors logo">
-      </a>
       <a class="enr-back" href="<?= base_url('dashboard') ?>">&larr; Dashboard</a>
     </div>
 
