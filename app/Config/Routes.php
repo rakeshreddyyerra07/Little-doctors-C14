@@ -19,3 +19,7 @@ $routes->get('/logout', 'AuthController::logout');
 
 // Dashboard (only for logged-in users)
 $routes->get('/dashboard', 'Dashboard::index', ['filter' => 'auth']);
+
+// Camp enrollment (only for logged-in users)
+$routes->get('/enroll', 'Enrollment::index', ['filter' => 'auth']);
+$routes->post('/enroll', 'Enrollment::save', ['filter' => 'auth']);

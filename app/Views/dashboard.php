@@ -402,6 +402,20 @@
 }
 
 
+/* ---------- FLASH MESSAGE ---------- */
+
+.dash-flash {
+    margin-top: 6px;
+    margin-bottom: 14px;
+    padding: 14px 20px;
+    border-radius: 16px;
+    background: #e3faf3;
+    border: 1px solid #a9e6d3;
+    color: #0e7a63;
+    font-weight: 700;
+}
+
+
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 960px) {
@@ -451,6 +465,12 @@
     </div>
 
 
+    <!-- SUCCESS MESSAGE -->
+    <?php if (session()->getFlashdata('success')): ?>
+      <div class="dash-flash">✅ <?= esc(session()->getFlashdata('success')) ?></div>
+    <?php endif; ?>
+
+
     <!-- HERO -->
     <div class="dash-hero">
 
@@ -458,7 +478,7 @@
       <p>Ready for your next adventure? Explore camps, enroll your child and help them grow into a Little Doctor.</p>
 
       <div class="hero-actions">
-        <a class="dash-btn primary" href="#">Enroll Now →</a>
+        <a class="dash-btn primary" href="<?= base_url('enroll') ?>">Enroll Now →</a>
         <a class="dash-btn ghost" href="<?= base_url('/#camps') ?>">Explore Camps</a>
       </div>
 
@@ -470,7 +490,7 @@
 
       <div class="stat">
         <div class="ico" style="background:#e3faf3">🎓</div>
-        <div><b>0</b><span>Enrollments</span></div>
+        <div><b><?= count($enrollments) ?></b><span>Enrollments</span></div>
       </div>
 
       <div class="stat">
@@ -500,7 +520,7 @@
         <div class="ico" style="background:#e3faf3">📝</div>
         <h3>Camp Enrollment</h3>
         <p>Enroll your child in a Little Doctors camp or course.</p>
-        <a class="dash-btn dark" href="#">Enroll Now</a>
+        <a class="dash-btn dark" href="<?= base_url('enroll') ?>">Enroll Now</a>
       </div>
 
       <div class="dcard c2">
@@ -560,6 +580,31 @@
         <div class="profile-line"><span>Email</span><b><?= esc($userEmail) ?></b></div>
         <div class="profile-line"><span>Status</span><b style="color:var(--d-green)">Logged in</b></div>
       </div>
+
+    </div>
+
+
+    <!-- MY ENROLLMENTS -->
+    <h2 class="dash-title">My enrollments</h2>
+
+    <div class="panel">
+
+      <?php if (empty($enrollments)): ?>
+        <p style="margin:0;color:var(--d-text);">
+          No enrollments yet.
+          <a href="<?= base_url('enroll') ?>" style="color:var(--d-coral);font-weight:800;">Enroll your child &rarr;</a>
+        </p>
+      <?php else: ?>
+        <?php foreach ($enrollments as $row): ?>
+          <div class="camp-row">
+            <div class="camp-date"><small>AGE</small><?= (int) $row->child_age ?></div>
+            <div class="camp-info">
+              <b><?= esc($row->child_name) ?></b>
+              <span><?= esc($row->camp) ?></span>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
 
     </div>
 
