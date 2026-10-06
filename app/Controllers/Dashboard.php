@@ -12,6 +12,9 @@ class Dashboard extends Controller
         return view('dashboard', [
             'userName'  => session()->get('user_name'),
             'userEmail' => session()->get('user_email'),
+
+            // TEMPORARY: shows all session data on the dashboard. Remove later.
+            'sessionData' => session()->get(),
         ]);
     }
 }
