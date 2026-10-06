@@ -79,8 +79,9 @@
 }
 
 .dash-bar img {
-    height: 90px;
-    width: auto;
+    width: 280px;
+    max-width: 100%;
+    height: auto;
     display: block;
 }
 
@@ -425,7 +426,7 @@
 }
 
 @media (max-width: 560px) {
-    .dash-bar img   { height: 64px; }
+    .dash-bar img   { width: 190px; }
     .dash-hero      { padding: 28px 22px; }
     .dash-hero h1   { font-size: 28px; }
     .dash-stats     { grid-template-columns: 1fr; }
