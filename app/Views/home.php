@@ -344,15 +344,30 @@ footer.site .brand {
 
     <div class="nav-actions">
 
-      <!-- Login opens the Login page -->
-      <a class="btn btn-outline" href="<?= base_url('login') ?>">
-        Login
-      </a>
+      <?php if (session()->get('logged_in')): ?>
 
-      <!-- Join opens the Register page -->
-      <a class="btn btn-solid" href="<?= base_url('register') ?>">
-        Join Little Doctors
-      </a>
+        <!-- Logged in: Dashboard + Logout -->
+        <a class="btn btn-outline" href="<?= base_url('dashboard') ?>">
+          Dashboard
+        </a>
+
+        <a class="btn btn-solid" href="<?= base_url('logout') ?>">
+          Logout
+        </a>
+
+      <?php else: ?>
+
+        <!-- Login opens the Login page -->
+        <a class="btn btn-outline" href="<?= base_url('login') ?>">
+          Login
+        </a>
+
+        <!-- Join opens the Register page -->
+        <a class="btn btn-solid" href="<?= base_url('register') ?>">
+          Join Little Doctors
+        </a>
+
+      <?php endif; ?>
 
     </div>
 
@@ -862,8 +877,13 @@ footer.site .brand {
 
       <a class="btn btn-outline small" href="#camps">Find a Camp</a>
 
-      <!-- Join Now opens Register -->
-      <a class="btn btn-solid" href="<?= base_url('register') ?>">Join Now</a>
+      <?php if (session()->get('logged_in')): ?>
+        <!-- Logged in: go to enrollment -->
+        <a class="btn btn-solid" href="<?= base_url('enroll') ?>">Enroll Now</a>
+      <?php else: ?>
+        <!-- Join Now opens Register -->
+        <a class="btn btn-solid" href="<?= base_url('register') ?>">Join Now</a>
+      <?php endif; ?>
 
     </div>
 

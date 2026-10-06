@@ -4,7 +4,7 @@ namespace Config;
 
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Session\Handlers\BaseHandler;
-use CodeIgniter\Session\Handlers\FileHandler;
+use CodeIgniter\Session\Handlers\DatabaseHandler;
 
 class Session extends BaseConfig
 {
@@ -14,7 +14,6 @@ class Session extends BaseConfig
      * --------------------------------------------------------------------------
      *
      * The session storage driver to use:
-     * - `CodeIgniter\Session\Handlers\ArrayHandler` (for testing)
      * - `CodeIgniter\Session\Handlers\FileHandler`
      * - `CodeIgniter\Session\Handlers\DatabaseHandler`
      * - `CodeIgniter\Session\Handlers\MemcachedHandler`
@@ -22,7 +21,7 @@ class Session extends BaseConfig
      *
      * @var class-string<BaseHandler>
      */
-    public string $driver = FileHandler::class;
+    public string $driver = DatabaseHandler::class;
 
     /**
      * --------------------------------------------------------------------------
@@ -40,8 +39,10 @@ class Session extends BaseConfig
      *
      * The number of SECONDS you want the session to last.
      * Setting to 0 (zero) means expire when the browser is closed.
+     *
+     * 604800 = 7 days (user stays logged in)
      */
-    public int $expiration = 7200;
+    public int $expiration = 604800;
 
     /**
      * --------------------------------------------------------------------------
@@ -50,25 +51,19 @@ class Session extends BaseConfig
      *
      * The location to save sessions to and is driver dependent.
      *
-     * For the 'files' driver, it's a path to a writable directory.
-     * WARNING: Only absolute paths are supported!
-     *
-     * For the 'database' driver, it's a table name.
-     * Please read up the manual for the format with other session drivers.
-     *
-     * IMPORTANT: You are REQUIRED to set a valid save path!
+     * For the DatabaseHandler, it's the TABLE NAME (see ci_sessions.sql).
+     * (For the old FileHandler it was WRITEPATH . 'session'.)
      */
-    
-public string $savePath = '/tmp/ci4-session';
+    public string $savePath = 'ci_sessions';
+
     /**
      * --------------------------------------------------------------------------
      * Session Match IP
      * --------------------------------------------------------------------------
      *
      * Whether to match the user's IP address when reading the session data.
-     *
-     * WARNING: If you're using the database driver, don't forget to update
-     *          your session table's PRIMARY KEY when changing this setting.
+     * Kept false so users are not logged out when their IP changes
+     * (mobile data, Wi-Fi switching).
      */
     public bool $matchIP = false;
 
