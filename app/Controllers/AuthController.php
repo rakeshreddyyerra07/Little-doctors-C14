@@ -59,8 +59,8 @@ class AuthController extends Controller
                 'logged_in'  => true
             ]);
 
-            // Login successful
-            return redirect()->to(base_url('/'));
+            // Login successful -> go to dashboard
+            return redirect()->to(base_url('dashboard'));
 
         } catch (\Throwable $e) {
 
@@ -68,6 +68,17 @@ class AuthController extends Controller
                 'error' => 'Unable to login. Please try again.'
             ]);
         }
+    }
+
+
+    /**
+     * LOGOUT
+     */
+    public function logout()
+    {
+        session()->destroy();
+
+        return redirect()->to(base_url('login'));
     }
 
 

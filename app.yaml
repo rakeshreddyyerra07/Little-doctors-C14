@@ -10,9 +10,10 @@ annotations:
     php_public_dir: public
     phpix: true
   anybuild.run/provider: php
-  anybuild.run/version: 0.32.2
+  anybuild.run/version: 0.33.0
   wasmer.io/version: 7.5.0
 enableDatabase: true
 env:
   PHPIX_PHP_THREADS: "4"
   CI_ENVIRONMENT: development
+enable_email: true

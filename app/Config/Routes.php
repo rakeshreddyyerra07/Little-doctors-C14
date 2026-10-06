@@ -1,4 +1,3 @@
-
 <?php
 
 use CodeIgniter\Router\RouteCollection;
@@ -15,3 +14,8 @@ $routes->post('/login', 'AuthController::login');
 $routes->get('/register', 'AuthController::register');
 $routes->post('/register', 'AuthController::register');
 
+// Logout
+$routes->get('/logout', 'AuthController::logout');
+
+// Dashboard (only for logged-in users)
+$routes->get('/dashboard', 'Dashboard::index', ['filter' => 'auth']);
