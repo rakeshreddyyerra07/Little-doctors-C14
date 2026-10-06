@@ -11,6 +11,11 @@ class AuthController extends Controller
      */
     public function login()
     {
+        // Already logged in -> go to dashboard
+        if (session()->get('logged_in')) {
+            return redirect()->to(base_url('dashboard'));
+        }
+
         // Show login page
         if (strtolower($this->request->getMethod()) !== 'post') {
             return view('auth/login');
@@ -51,7 +56,9 @@ class AuthController extends Controller
                 ]);
             }
 
-            // Create login session
+            // Create login session (new session ID for safety)
+            session()->regenerate();
+
             session()->set([
                 'user_id'    => $user->id,
                 'user_name'  => $user->name,
@@ -87,6 +94,11 @@ class AuthController extends Controller
      */
     public function register()
     {
+        // Already logged in -> go to dashboard
+        if (session()->get('logged_in')) {
+            return redirect()->to(base_url('dashboard'));
+        }
+
         // Get request method
         $method = strtolower($this->request->getMethod());
 
