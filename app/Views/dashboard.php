@@ -1,5 +1,5 @@
-
 <?= $this->extend('layout/main') ?>
+
 <?= $this->section('content') ?>
 
 <style>
@@ -94,18 +94,9 @@
 .dash-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 16px;
     padding: 18px 0;
-}
-
-/* UPDATED LOGO: wider and shorter */
-.dash-bar img {
-    width: 340px;
-    max-width: 100%;
-    height: 105px;
-    object-fit: fill;
-    display: block;
 }
 
 .dash-bar-right {
@@ -484,13 +475,6 @@
 }
 
 @media (max-width: 560px) {
-    /* UPDATED MOBILE LOGO */
-    .dash-bar img {
-        width: 220px;
-        max-width: 100%;
-        height: 75px;
-        object-fit: fill;
-    }
 
     .dash-hero {
         padding: 28px 22px;
@@ -516,269 +500,255 @@
 
 <div class="dash-page">
 
-    <span class="dash-bubble b1"></span>
-    <span class="dash-bubble b2"></span>
-    <span class="dash-bubble b3"></span>
+```
+<span class="dash-bubble b1"></span>
+<span class="dash-bubble b2"></span>
+<span class="dash-bubble b3"></span>
 
-    <div class="dash-inner">
+<div class="dash-inner">
 
-        <!-- TOP BAR -->
-        <div class="dash-bar">
+    <!-- TOP BAR -->
+    <div class="dash-bar">
 
-            <a href="<?= base_url('/') ?>">
-                <img
-                    src="<?= base_url('assets/images/logo.png') ?>"
-                    alt="Little Doctors logo"
-                >
+        <div class="dash-bar-right">
+
+            <div class="dash-user">
+                <div class="dash-avatar">
+                    <?= esc(strtoupper(substr((string) $userName, 0, 1))) ?>
+                </div>
+
+                <span><?= esc($userName) ?></span>
+            </div>
+
+            <a class="dash-btn line" href="<?= base_url('/') ?>">
+                Home
             </a>
 
-            <div class="dash-bar-right">
-
-                <div class="dash-user">
-                    <div class="dash-avatar">
-                        <?= esc(strtoupper(substr((string) $userName, 0, 1))) ?>
-                    </div>
-
-                    <span><?= esc($userName) ?></span>
-                </div>
-
-                <a class="dash-btn line" href="<?= base_url('/') ?>">
-                    Home
-                </a>
-
-                <a class="dash-btn dark" href="<?= base_url('logout') ?>">
-                    Logout
-                </a>
-
-            </div>
-        </div>
-
-        <!-- SUCCESS MESSAGE -->
-        <?php if (session()->getFlashdata('success')): ?>
-            <div class="dash-flash">
-                ✅ <?= esc(session()->getFlashdata('success')) ?>
-            </div>
-        <?php endif; ?>
-
-        <!-- HERO -->
-        <div class="dash-hero">
-
-            <h1>Welcome back, <?= esc($userName) ?>! 👋</h1>
-
-            <p>
-                Ready for your next adventure? Explore camps, enroll your child
-                and help them grow into a Little Doctor.
-            </p>
-
-            <div class="hero-actions">
-                <a class="dash-btn primary" href="<?= base_url('enroll') ?>">
-                    Enroll Now →
-                </a>
-
-                <a class="dash-btn ghost" href="<?= base_url('/#camps') ?>">
-                    Explore Camps
-                </a>
-            </div>
+            <a class="dash-btn dark" href="<?= base_url('logout') ?>">
+                Logout
+            </a>
 
         </div>
+    </div>
 
-        <!-- STATS -->
-        <div class="dash-stats">
-
-            <div class="stat">
-                <div class="ico" style="background:#e3faf3">🎓</div>
-                <div>
-                    <b><?= count($enrollments) ?></b>
-                    <span>Enrollments</span>
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="ico" style="background:#fff3de">⭐</div>
-                <div>
-                    <b>0</b>
-                    <span>Badges earned</span>
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="ico" style="background:#f2eefc">📅</div>
-                <div>
-                    <b>3</b>
-                    <span>Upcoming camps</span>
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="ico" style="background:#ffe7ec">🧸</div>
-                <div>
-                    <b>10,000+</b>
-                    <span>Little Doctors</span>
-                </div>
-            </div>
-
+    <!-- SUCCESS MESSAGE -->
+    <?php if (session()->getFlashdata('success')): ?>
+        <div class="dash-flash">
+            ✅ <?= esc(session()->getFlashdata('success')) ?>
         </div>
+    <?php endif; ?>
 
-        <!-- QUICK ACTIONS -->
-        <h2 class="dash-title">Quick actions</h2>
+    <!-- HERO -->
+    <div class="dash-hero">
 
-        <div class="dash-cards">
+        <h1>Welcome back, <?= esc($userName) ?>! 👋</h1>
 
-            <div class="dcard">
-                <div class="ico" style="background:#e3faf3">📝</div>
+        <p>
+            Ready for your next adventure? Explore camps, enroll your child
+            and help them grow into a Little Doctor.
+        </p>
 
-                <h3>Camp Enrollment</h3>
+        <div class="hero-actions">
+            <a class="dash-btn primary" href="<?= base_url('enroll') ?>">
+                Enroll Now →
+            </a>
 
-                <p>
-                    Enroll your child in a Little Doctors camp or course.
-                </p>
-
-                <a class="dash-btn dark" href="<?= base_url('enroll') ?>">
-                    Enroll Now
-                </a>
-            </div>
-
-            <div class="dcard c2">
-                <div class="ico" style="background:#ffe7e2">🏕️</div>
-
-                <h3>Explore Camps</h3>
-
-                <p>
-                    See upcoming summer camps and weekend workshops near you.
-                </p>
-
-                <a class="dash-btn line" href="<?= base_url('/#camps') ?>">
-                    View Camps
-                </a>
-            </div>
-
-            <div class="dcard c3">
-                <div class="ico" style="background:#f2eefc">🧠</div>
-
-                <h3>Learning Lab</h3>
-
-                <p>
-                    Brain, heart, lungs, bones and nutrition - learn through fun topics.
-                </p>
-
-                <a class="dash-btn line" href="<?= base_url('/#lab') ?>">
-                    Start Learning
-                </a>
-            </div>
-
+            <a class="dash-btn ghost" href="<?= base_url('/#camps') ?>">
+                Explore Camps
+            </a>
         </div>
-
-        <!-- CAMPS + PROFILE -->
-        <h2 class="dash-title">Your overview</h2>
-
-        <div class="dash-two">
-
-            <div class="panel">
-                <h3>Upcoming camps</h3>
-
-                <div class="camp-row">
-                    <div class="camp-date">
-                        <small>JUN</small>15
-                    </div>
-
-                    <div class="camp-info">
-                        <b>Little Doctors Camp</b>
-                        <span>Boston, MA &bull; Ages 8 - 14</span>
-                    </div>
-                </div>
-
-                <div class="camp-row">
-                    <div class="camp-date">
-                        <small>JUL</small>12
-                    </div>
-
-                    <div class="camp-info">
-                        <b>Heart &amp; Health Workshop</b>
-                        <span>New York, NY &bull; Ages 7 - 12</span>
-                    </div>
-                </div>
-
-                <div class="camp-row">
-                    <div class="camp-date">
-                        <small>AUG</small>2
-                    </div>
-
-                    <div class="camp-info">
-                        <b>Human Body Explorer Camp</b>
-                        <span>Chicago, IL &bull; Ages 8 - 14</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h3>My profile</h3>
-
-                <div class="profile-line">
-                    <span>Name</span>
-                    <b><?= esc($userName) ?></b>
-                </div>
-
-                <div class="profile-line">
-                    <span>Email</span>
-                    <b><?= esc($userEmail) ?></b>
-                </div>
-
-                <div class="profile-line">
-                    <span>Status</span>
-                    <b style="color:var(--d-green)">Logged in</b>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- MY ENROLLMENTS -->
-        <h2 class="dash-title">My enrollments</h2>
-
-        <div class="panel">
-
-            <?php if (empty($enrollments)): ?>
-
-                <p style="margin:0;color:var(--d-text);">
-                    No enrollments yet.
-
-                    <a
-                        href="<?= base_url('enroll') ?>"
-                        style="color:var(--d-coral);font-weight:800;"
-                    >
-                        Enroll your child &rarr;
-                    </a>
-                </p>
-
-            <?php else: ?>
-
-                <?php foreach ($enrollments as $row): ?>
-
-                    <div class="camp-row">
-
-                        <div class="camp-date">
-                            <small>AGE</small><?= (int) $row->child_age ?>
-                        </div>
-
-                        <div class="camp-info">
-                            <b><?= esc($row->child_name) ?></b>
-                            <span><?= esc($row->camp) ?></span>
-                        </div>
-
-                    </div>
-
-                <?php endforeach; ?>
-
-            <?php endif; ?>
-
-        </div>
-
-        <!-- TEMPORARY SESSION BOX -->
-        <details class="session-box">
-            <summary>Session data (temporary - remove later)</summary>
-            <pre><?= esc(print_r($sessionData, true)) ?></pre>
-        </details>
 
     </div>
+
+    <!-- STATS -->
+    <div class="dash-stats">
+
+        <div class="stat">
+            <div class="ico" style="background:#e3faf3">🎓</div>
+            <div>
+                <b><?= count($enrollments) ?></b>
+                <span>Enrollments</span>
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="ico" style="background:#fff3de">⭐</div>
+            <div>
+                <b>0</b>
+                <span>Badges earned</span>
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="ico" style="background:#f2eefc">📅</div>
+            <div>
+                <b>3</b>
+                <span>Upcoming camps</span>
+            </div>
+        </div>
+
+        <div class="stat">
+            <div class="ico" style="background:#ffe7ec">🧸</div>
+            <div>
+                <b>10,000+</b>
+                <span>Little Doctors</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <h2 class="dash-title">Quick actions</h2>
+
+    <div class="dash-cards">
+
+        <div class="dcard">
+            <div class="ico" style="background:#e3faf3">📝</div>
+
+            <h3>Camp Enrollment</h3>
+
+            <p>
+                Enroll your child in a Little Doctors camp or course.
+            </p>
+
+            <a class="dash-btn dark" href="<?= base_url('enroll') ?>">
+                Enroll Now
+            </a>
+        </div>
+
+        <div class="dcard c2">
+            <div class="ico" style="background:#ffe7e2">🏕️</div>
+
+            <h3>Explore Camps</h3>
+
+            <p>
+                See upcoming summer camps and weekend workshops near you.
+            </p>
+
+            <a class="dash-btn line" href="<?= base_url('/#camps') ?>">
+                View Camps
+            </a>
+        </div>
+
+        <div class="dcard c3">
+            <div class="ico" style="background:#f2eefc">🧠</div>
+
+            <h3>Learning Lab</h3>
+
+            <p>
+                Brain, heart, lungs, bones and nutrition - learn through fun topics.
+            </p>
+
+            <a class="dash-btn line" href="<?= base_url('/#lab') ?>">
+                Start Learning
+            </a>
+        </div>
+
+    </div>
+
+    <!-- CAMPS + PROFILE -->
+    <h2 class="dash-title">Your overview</h2>
+
+    <div class="dash-two">
+
+        <div class="panel">
+            <h3>Upcoming camps</h3>
+
+            <div class="camp-row">
+                <div class="camp-date">
+                    <small>JUN</small>15
+                </div>
+
+                <div class="camp-info">
+                    <b>Little Doctors Camp</b>
+                    <span>Boston, MA &bull; Ages 8 - 14</span>
+                </div>
+            </div>
+
+            <div class="camp-row">
+                <div class="camp-date">
+                    <small>JUL</small>12
+                </div>
+
+                <div class="camp-info">
+                    <b>Heart &amp; Health Workshop</b>
+                    <span>New York, NY &bull; Ages 7 - 12</span>
+                </div>
+            </div>
+
+            <div class="camp-row">
+                <div class="camp-date">
+                    <small>AUG</small>2
+                </div>
+
+                <div class="camp-info">
+                    <b>Human Body Explorer Camp</b>
+                    <span>Chicago, IL &bull; Ages 8 - 14</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>My profile</h3>
+
+            <div class="profile-line">
+                <span>Name</span>
+                <b><?= esc($userName) ?></b>
+            </div>
+
+            <div class="profile-line">
+                <span>Email</span>
+                <b><?= esc($userEmail) ?></b>
+            </div>
+
+            <div class="profile-line">
+                <span>Status</span>
+                <b style="color:var(--d-green)">Logged in</b>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MY ENROLLMENTS -->
+    <h2 class="dash-title">My enrollments</h2>
+
+    <div class="panel">
+
+        <?php if (empty($enrollments)): ?>
+
+            <p style="margin:0;color:var(--d-text);">
+                No enrollments yet.
+
+                <a
+                    href="<?= base_url('enroll') ?>"
+                    style="color:var(--d-coral);font-weight:800;"
+                >
+                    Enroll your child &rarr;
+                </a>
+            </p>
+
+        <?php else: ?>
+
+            <?php foreach ($enrollments as $row): ?>
+
+                <div class="camp-row">
+
+                    <div class="camp-date">
+                        <small>AGE</small><?= (int) $row->child_age ?>
+                    </div>
+
+                    <div class="camp-info">
+                        <b><?= esc($row->child_name) ?></b>
+                        <span><?= esc($row->camp) ?></span>
+                    </div>
+
+                </div>
+
+            <?php endforeach; ?>
+
+        <?php endif; ?>
+
+   
 
 </div>
 
