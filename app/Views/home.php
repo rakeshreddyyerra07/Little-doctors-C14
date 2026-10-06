@@ -234,7 +234,7 @@
 .hero .hero-art .hero-photo {
     width: 100% !important;
     height: auto !important;
-    max-width: min(520px, 100%) !important;
+    max-width: min(680px, 100%) !important;
     max-height: none !important;
     aspect-ratio: auto !important;
     border-radius: 0 !important;
@@ -250,8 +250,8 @@
 @media (min-width: 801px) {
     .hero .hero-art {
         justify-content: center !important;
-        transform: translateX(-20px) !important;
-        min-height: 540px !important;
+        transform: translateX(0) !important;
+        min-height: 640px !important;
     }
 }
 
