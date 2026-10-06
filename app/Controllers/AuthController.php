@@ -59,11 +59,24 @@ class AuthController extends Controller
             // Create login session (new session ID for safety)
             session()->regenerate();
 
+            // Set normal CodeIgniter session variables
             session()->set([
                 'user_id'    => $user->id,
                 'user_name'  => $user->name,
                 'user_email' => $user->email,
                 'logged_in'  => true
+            ]);
+
+            // -------------------------------------------------
+            // SAVE SESSION VARIABLES IN SEPARATE TABLE
+            // -------------------------------------------------
+
+            $db->table('user_sessions')->insert([
+                'user_id'    => $user->id,
+                'user_name'  => $user->name,
+                'user_email' => $user->email,
+                'logged_in'  => 1,
+                'session_id' => session_id()
             ]);
 
             // Login successful -> go to dashboard
