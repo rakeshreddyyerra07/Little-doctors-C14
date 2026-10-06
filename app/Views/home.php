@@ -294,6 +294,27 @@
 
 }
 
+/* =========================================================
+   FOOTER LOGO BOX + CTA BUTTON (new, appended)
+   - hides the grey logo box in the footer
+   - makes the "Find a Camp" button text visible on the teal bar
+========================================================= */
+
+footer.site .brand {
+    display: none !important;
+}
+
+.final-cta .btn-outline {
+    background: transparent !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+.final-cta .btn-outline:hover {
+    background: #fff !important;
+    color: var(--navy) !important;
+}
+
 </style>
 
 
