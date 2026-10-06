@@ -227,12 +227,18 @@
 
 @media (min-width: 801px) {
 
-    .hero-art .blob {
+    /* new hero-kids.png already has its own circle + icons */
+    .hero-art .blob,
+    .hero-art .badge {
         display: none !important;
     }
 
     .hero-art .hero-photo {
-        max-width: 540px !important;
+        width: 100% !important;
+        height: auto !important;
+        max-width: 520px !important;
+        max-height: none !important;
+        border-radius: 0 !important;
         filter: drop-shadow(0 18px 26px rgba(20, 60, 120, .14));
     }
 
