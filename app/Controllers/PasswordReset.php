@@ -56,10 +56,15 @@ class PasswordReset extends Controller
                 ]));
 
                 if (! $mailer->send(false)) {
-                    $debug = $mailer->printDebugger(['headers']); // TEMPORARY
+                    $debug = (env('SMTP_HOST') && env('SMTP_USER') && env('SMTP_PASS'))
+                        ? $mailer->printDebugger(['headers'])
+                        : 'SMTP_HOST / SMTP_USER / SMTP_PASS are NOT set on this server.'; // TEMPORARY
                     log_message('error', 'Password reset email failed: ' . $debug);
-                    if (ENVIRONMENT !== 'production') {
-                        $devLink = $link; // local testing without SMTP
+
+                    // Show the link only when running on your own computer
+                    $ip = $this->request->getIPAddress();
+                    if (in_array($ip, ['127.0.0.1', '::1'], true)) {
+                        $devLink = $link;
                     }
                 }
             } else {
