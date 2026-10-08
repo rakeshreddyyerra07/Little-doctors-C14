@@ -56,9 +56,7 @@ class PasswordReset extends Controller
                 ]));
 
                 if (! $mailer->send(false)) {
-                    $debug = (env('SMTP_HOST') && env('SMTP_USER') && env('SMTP_PASS'))
-                        ? $mailer->printDebugger(['headers'])
-                        : 'SMTP_HOST / SMTP_USER / SMTP_PASS are NOT set on this server.'; // TEMPORARY
+                    $debug = $mailer->printDebugger(['headers']); // TEMPORARY
                     log_message('error', 'Password reset email failed: ' . $debug);
 
                     // Show the link only when running on your own computer

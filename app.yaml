@@ -15,5 +15,5 @@ annotations:
 enableDatabase: true
 env:
   PHPIX_PHP_THREADS: "4"
-  CI_ENVIRONMENT: development
+  CI_ENVIRONMENT: production
 enable_email: true
