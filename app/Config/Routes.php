@@ -14,6 +14,12 @@ $routes->post('/login', 'AuthController::login');
 $routes->get('/register', 'AuthController::register');
 $routes->post('/register', 'AuthController::register');
 
+// Forgot / reset password
+$routes->get('/forgot-password', 'PasswordReset::forgotForm');
+$routes->post('/forgot-password', 'PasswordReset::sendLink');
+$routes->get('/reset-password/(:segment)', 'PasswordReset::resetForm/$1');
+$routes->post('/reset-password', 'PasswordReset::updatePassword');
+
 // Logout
 $routes->get('/logout', 'AuthController::logout');
 
