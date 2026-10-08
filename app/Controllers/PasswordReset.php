@@ -146,53 +146,25 @@ class PasswordReset extends Controller
     }
 
     /**
-     * Send an email through the Brevo API (HTTPS).
-     * Needs BREVO_API_KEY and BREVO_SENDER (a sender verified in Brevo).
+     * Send using Wasmer's built-in email (enable_email: true in app.yaml).
+     * No API key or secrets needed.
      */
     private function sendMail(string $to, string $subject, string $html, ?string &$error = null): bool
     {
-        // Strip stray spaces, newlines and quotes that can get stored with a secret
-        $strip  = " \t\n\r\0\x0B\"'";
-        $apiKey = trim((string) env('BREVO_API_KEY'), $strip);
-        $sender = trim((string) env('BREVO_SENDER'), $strip);
+        $mailer = service('email');
+        $mailer->clear();
+        $mailer->setMailType('html');
+        $mailer->setFrom('noreply@little-doctors-c14.wasmer.app', 'Little Doctors');
+        $mailer->setTo($to);
+        $mailer->setSubject($subject);
+        $mailer->setMessage($html);
 
-        if ($apiKey === '' || $sender === '') {
-            $error = 'BREVO_API_KEY / BREVO_SENDER are not set on this server.';
-            return false;
+        if ($mailer->send(false)) {
+            return true;
         }
 
-        try {
-            $response = \Config\Services::curlrequest()->post('https://api.brevo.com/v3/smtp/email', [
-                'headers' => [
-                    'api-key'      => $apiKey,
-                    'accept'       => 'application/json',
-                    'content-type' => 'application/json',
-                ],
-                'json' => [
-                    'sender'      => ['name' => 'Little Doctors', 'email' => $sender],
-                    'to'          => [['email' => $to]],
-                    'subject'     => $subject,
-                    'htmlContent' => $html,
-                ],
-                'http_errors' => false,
-                'timeout'     => 20,
-            ]);
-
-            $code = $response->getStatusCode();
-            if ($code >= 200 && $code < 300) {
-                return true;
-            }
-
-            // TEMPORARY diagnostics (never prints the key itself)
-            $error = 'Brevo HTTP ' . $code . ': ' . $response->getBody()
-                . ' | key length=' . strlen($apiKey)
-                . ' | starts with xkeysib-=' . (strpos($apiKey, 'xkeysib-') === 0 ? 'yes' : 'NO')
-                . ' | sender=' . $sender;
-            return false;
-        } catch (\Throwable $e) {
-            $error = 'Mail exception: ' . $e->getMessage();
-            return false;
-        }
+        $error = $mailer->printDebugger(['headers']);
+        return false;
     }
 
     private function findValidToken(string $token)
