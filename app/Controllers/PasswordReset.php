@@ -27,7 +27,7 @@ class PasswordReset extends Controller
         }
 
         $devLink = null;
-        $debug   = null; // TEMPORARY: remove after fixing email
+        $debug   = null; // TEMPORARY: remove after email works
 
         try {
             $db   = \Config\Database::connect();
@@ -47,17 +47,12 @@ class PasswordReset extends Controller
 
                 $link = base_url('reset-password/' . $token);
 
-                $mailer = service('email');
-                $mailer->setFrom('noreply@little-doctors-c14.wasmer.app', 'Little Doctors');
-                $mailer->setTo($user->email);
-                $mailer->setSubject('Reset your Little Doctors password');
-                $mailer->setMessage(view('auth/reset_email', [
+                $html = view('auth/reset_email', [
                     'link'    => $link,
                     'minutes' => $this->expiryMinutes,
-                ]));
+                ]);
 
-                if (! $mailer->send(false)) {
-                    $debug = $mailer->printDebugger(['headers']); // TEMPORARY
+                if (! $this->sendMail($user->email, 'Reset your Little Doctors password', $html, $debug)) {
                     log_message('error', 'Password reset email failed: ' . $debug);
 
                     // Show the link only when running on your own computer
@@ -148,6 +143,50 @@ class PasswordReset extends Controller
 
         return redirect()->to(base_url('login'))
             ->with('success', 'Password updated! Please log in with your new password.');
+    }
+
+    /**
+     * Send an email through the Brevo API (HTTPS).
+     * Needs BREVO_API_KEY and BREVO_SENDER (a sender verified in Brevo).
+     */
+    private function sendMail(string $to, string $subject, string $html, ?string &$error = null): bool
+    {
+        $apiKey = env('BREVO_API_KEY');
+        $sender = env('BREVO_SENDER');
+
+        if (! $apiKey || ! $sender) {
+            $error = 'BREVO_API_KEY / BREVO_SENDER are not set on this server.';
+            return false;
+        }
+
+        try {
+            $response = \Config\Services::curlrequest()->post('https://api.brevo.com/v3/smtp/email', [
+                'headers' => [
+                    'api-key'      => $apiKey,
+                    'accept'       => 'application/json',
+                    'content-type' => 'application/json',
+                ],
+                'json' => [
+                    'sender'      => ['name' => 'Little Doctors', 'email' => $sender],
+                    'to'          => [['email' => $to]],
+                    'subject'     => $subject,
+                    'htmlContent' => $html,
+                ],
+                'http_errors' => false,
+                'timeout'     => 20,
+            ]);
+
+            $code = $response->getStatusCode();
+            if ($code >= 200 && $code < 300) {
+                return true;
+            }
+
+            $error = 'Brevo HTTP ' . $code . ': ' . $response->getBody();
+            return false;
+        } catch (\Throwable $e) {
+            $error = 'Mail exception: ' . $e->getMessage();
+            return false;
+        }
     }
 
     private function findValidToken(string $token)
