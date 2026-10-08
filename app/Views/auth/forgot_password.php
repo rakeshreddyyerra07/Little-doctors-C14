@@ -30,7 +30,7 @@
   <div class="card" style="max-width:26rem;width:100%;">
     <h1 style="color:var(--navy);font-size:1.6rem;margin-bottom:6px;">Forgot Password?</h1>
     <p style="color:var(--gray);font-size:.95rem;margin-bottom:22px;">
-      Enter your email and we'll send you a link to reset your password.
+      Enter your registered email and name to set a new password.
     </p>
 
     <?php if (session()->getFlashdata('success')): ?>
@@ -43,18 +43,6 @@
       <div style="background:#fde3e0;color:#a3311f;padding:.7rem 1rem;border-radius:8px;margin-bottom:1.2rem;font-size:.9rem;">
         <?= esc(session()->getFlashdata('error')) ?>
       </div>
-    <?php endif; ?>
-
-    <?php if (session()->getFlashdata('dev_link')): ?>
-      <div style="background:#fff7e6;color:#8a5a00;padding:.7rem 1rem;border-radius:8px;margin-bottom:1.2rem;font-size:.85rem;word-break:break-all;">
-        Dev only (email not configured):<br>
-        <a href="<?= esc(session()->getFlashdata('dev_link')) ?>"><?= esc(session()->getFlashdata('dev_link')) ?></a>
-      </div>
-    <?php endif; ?>
-
-    <?php /* TEMPORARY DEBUG BOX: remove after email works */ ?>
-    <?php if (session()->getFlashdata('debug')): ?>
-      <pre style="background:#f3f4f6;color:#111;padding:.7rem 1rem;border-radius:8px;margin-bottom:1.2rem;font-size:.75rem;white-space:pre-wrap;word-break:break-all;"><?= esc(session()->getFlashdata('debug')) ?></pre>
     <?php endif; ?>
 
     <form action="<?= base_url('forgot-password') ?>" method="post">
@@ -70,7 +58,17 @@
         >
       </div>
 
-      <button type="submit" class="btn btn-solid" style="width:100%;justify-content:center;">Send Reset Link</button>
+      <div style="margin-bottom:1.1rem;">
+        <label for="name" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">Name</label>
+        <input
+          type="text" id="name" name="name"
+          value="<?= esc(old('name')) ?>"
+          placeholder="Name you registered with" required autocomplete="name"
+          style="width:100%;padding:.65rem .8rem;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg-blue);"
+        >
+      </div>
+
+      <button type="submit" class="btn btn-solid" style="width:100%;justify-content:center;">Continue</button>
     </form>
 
     <div style="text-align:center;font-size:.9rem;color:var(--gray);margin-top:1.2rem;">

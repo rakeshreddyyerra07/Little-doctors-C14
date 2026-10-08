@@ -6,7 +6,7 @@ use CodeIgniter\Controller;
 
 class PasswordReset extends Controller
 {
-    private int $expiryMinutes = 60;
+    private int $expiryMinutes = 15;
 
     public function forgotForm()
     {
@@ -16,24 +16,38 @@ class PasswordReset extends Controller
         return view('auth/forgot_password');
     }
 
+    /**
+     * Verify registered email + name, then go straight to the reset page.
+     */
     public function sendLink()
     {
         $email = trim((string) $this->request->getPost('email'));
+        $name  = trim((string) $this->request->getPost('name'));
 
-        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if ($email === '' || $name === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return redirect()->to(base_url('forgot-password'))
                 ->withInput()
-                ->with('error', 'Please enter a valid email address.');
+                ->with('error', 'Please enter your registered email and name.');
         }
 
-        $devLink = null;
-        $debug   = null; // TEMPORARY: remove after email works
+        // Simple throttle: 5 attempts per 15 minutes per browser session
+        $attempts = (int) session()->get('reset_attempts');
+        $since    = (int) session()->get('reset_attempts_since');
+        if ($since < time() - 900) {
+            $attempts = 0;
+            $since    = time();
+        }
+        if ($attempts >= 5) {
+            return redirect()->to(base_url('forgot-password'))
+                ->with('error', 'Too many attempts. Please wait 15 minutes and try again.');
+        }
+        session()->set(['reset_attempts' => $attempts + 1, 'reset_attempts_since' => $since]);
 
         try {
             $db   = \Config\Database::connect();
             $user = $db->table('users')->where('email', $email)->get()->getRow();
 
-            if ($user) {
+            if ($user && strcasecmp(trim((string) $user->name), $name) === 0) {
                 // Remove older tokens for this email
                 $db->table('password_resets')->where('email', $user->email)->delete();
 
@@ -45,50 +59,23 @@ class PasswordReset extends Controller
                     'created_at' => date('Y-m-d H:i:s'),
                 ]);
 
-                $link = base_url('reset-password/' . $token);
-
-                $html = view('auth/reset_email', [
-                    'link'    => $link,
-                    'minutes' => $this->expiryMinutes,
-                ]);
-
-                if (! $this->sendMail($user->email, 'Reset your Little Doctors password', $html, $debug)) {
-                    log_message('error', 'Password reset email failed: ' . $debug);
-
-                    // Show the link only when running on your own computer
-                    $ip = $this->request->getIPAddress();
-                    if (in_array($ip, ['127.0.0.1', '::1'], true)) {
-                        $devLink = $link;
-                    }
-                }
-            } else {
-                $debug = 'No user found with this email in the users table.'; // TEMPORARY
+                return redirect()->to(base_url('reset-password/' . $token));
             }
         } catch (\Throwable $e) {
-            $debug = 'Exception: ' . $e->getMessage(); // TEMPORARY
             log_message('error', 'Forgot password error: ' . $e->getMessage());
         }
 
-        // Same message whether or not the email exists
-        $redirect = redirect()->to(base_url('forgot-password'))
-            ->with('success', 'If that email is registered, a reset link has been sent. Please check your inbox.');
-
-        if ($devLink) {
-            $redirect->with('dev_link', $devLink);
-        }
-
-        if ($debug) { // TEMPORARY
-            $redirect->with('debug', $debug);
-        }
-
-        return $redirect;
+        // Same message whether the email or the name was wrong
+        return redirect()->to(base_url('forgot-password'))
+            ->withInput()
+            ->with('error', 'We could not match that email and name. Please check and try again.');
     }
 
     public function resetForm(string $token)
     {
         if (! $this->findValidToken($token)) {
             return redirect()->to(base_url('forgot-password'))
-                ->with('error', 'This reset link is invalid or has expired. Please request a new one.');
+                ->with('error', 'This reset link is invalid or has expired. Please try again.');
         }
         return view('auth/reset_password', ['token' => $token]);
     }
@@ -102,7 +89,7 @@ class PasswordReset extends Controller
         $row = $this->findValidToken($token);
         if (! $row) {
             return redirect()->to(base_url('forgot-password'))
-                ->with('error', 'This reset link is invalid or has expired. Please request a new one.');
+                ->with('error', 'This reset link is invalid or has expired. Please try again.');
         }
 
         if ($password === '' || $confirmPassword === '') {
@@ -143,28 +130,6 @@ class PasswordReset extends Controller
 
         return redirect()->to(base_url('login'))
             ->with('success', 'Password updated! Please log in with your new password.');
-    }
-
-    /**
-     * Send using Wasmer's built-in email (enable_email: true in app.yaml).
-     * No API key or secrets needed.
-     */
-    private function sendMail(string $to, string $subject, string $html, ?string &$error = null): bool
-    {
-        $mailer = service('email');
-        $mailer->clear();
-        $mailer->setMailType('html');
-        $mailer->setFrom('noreply@little-doctors-c14.wasmer.app', 'Little Doctors');
-        $mailer->setTo($to);
-        $mailer->setSubject($subject);
-        $mailer->setMessage($html);
-
-        if ($mailer->send(false)) {
-            return true;
-        }
-
-        $error = $mailer->printDebugger(['headers']);
-        return false;
     }
 
     private function findValidToken(string $token)
