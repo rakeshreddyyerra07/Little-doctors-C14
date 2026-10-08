@@ -151,10 +151,12 @@ class PasswordReset extends Controller
      */
     private function sendMail(string $to, string $subject, string $html, ?string &$error = null): bool
     {
-        $apiKey = env('BREVO_API_KEY');
-        $sender = env('BREVO_SENDER');
+        // Strip stray spaces, newlines and quotes that can get stored with a secret
+        $strip  = " \t\n\r\0\x0B\"'";
+        $apiKey = trim((string) env('BREVO_API_KEY'), $strip);
+        $sender = trim((string) env('BREVO_SENDER'), $strip);
 
-        if (! $apiKey || ! $sender) {
+        if ($apiKey === '' || $sender === '') {
             $error = 'BREVO_API_KEY / BREVO_SENDER are not set on this server.';
             return false;
         }
@@ -181,7 +183,11 @@ class PasswordReset extends Controller
                 return true;
             }
 
-            $error = 'Brevo HTTP ' . $code . ': ' . $response->getBody();
+            // TEMPORARY diagnostics (never prints the key itself)
+            $error = 'Brevo HTTP ' . $code . ': ' . $response->getBody()
+                . ' | key length=' . strlen($apiKey)
+                . ' | starts with xkeysib-=' . (strpos($apiKey, 'xkeysib-') === 0 ? 'yes' : 'NO')
+                . ' | sender=' . $sender;
             return false;
         } catch (\Throwable $e) {
             $error = 'Mail exception: ' . $e->getMessage();
