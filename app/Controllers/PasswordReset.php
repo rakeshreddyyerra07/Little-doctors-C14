@@ -27,6 +27,7 @@ class PasswordReset extends Controller
         }
 
         $devLink = null;
+        $debug   = null; // TEMPORARY: remove after fixing email
 
         try {
             $db   = \Config\Database::connect();
@@ -55,13 +56,17 @@ class PasswordReset extends Controller
                 ]));
 
                 if (! $mailer->send(false)) {
-                    log_message('error', 'Password reset email failed: ' . $mailer->printDebugger(['headers']));
+                    $debug = $mailer->printDebugger(['headers']); // TEMPORARY
+                    log_message('error', 'Password reset email failed: ' . $debug);
                     if (ENVIRONMENT !== 'production') {
                         $devLink = $link; // local testing without SMTP
                     }
                 }
+            } else {
+                $debug = 'No user found with this email in the users table.'; // TEMPORARY
             }
         } catch (\Throwable $e) {
+            $debug = 'Exception: ' . $e->getMessage(); // TEMPORARY
             log_message('error', 'Forgot password error: ' . $e->getMessage());
         }
 
@@ -72,6 +77,11 @@ class PasswordReset extends Controller
         if ($devLink) {
             $redirect->with('dev_link', $devLink);
         }
+
+        if ($debug) { // TEMPORARY
+            $redirect->with('debug', $debug);
+        }
+
         return $redirect;
     }
 

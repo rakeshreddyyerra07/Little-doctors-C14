@@ -52,6 +52,11 @@
       </div>
     <?php endif; ?>
 
+    <?php /* TEMPORARY DEBUG BOX: remove after email works */ ?>
+    <?php if (session()->getFlashdata('debug')): ?>
+      <pre style="background:#f3f4f6;color:#111;padding:.7rem 1rem;border-radius:8px;margin-bottom:1.2rem;font-size:.75rem;white-space:pre-wrap;word-break:break-all;"><?= esc(session()->getFlashdata('debug')) ?></pre>
+    <?php endif; ?>
+
     <form action="<?= base_url('forgot-password') ?>" method="post">
       <?= csrf_field() ?>
 
