@@ -48,6 +48,7 @@ class PasswordReset extends Controller
                 $link = base_url('reset-password/' . $token);
 
                 $mailer = service('email');
+                $mailer->setFrom('noreply@little-doctors-c14.wasmer.app', 'Little Doctors');
                 $mailer->setTo($user->email);
                 $mailer->setSubject('Reset your Little Doctors password');
                 $mailer->setMessage(view('auth/reset_email', [
