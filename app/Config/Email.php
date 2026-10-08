@@ -123,4 +123,31 @@ class Email extends BaseConfig
      * Enable notify message from server
      */
     public bool $DSN = false;
+
+    /**
+     * Read SMTP settings from environment variables (SMTP_HOST, SMTP_USER, ...)
+     * so the password never goes into git. Works with .env locally
+     * and with environment variables on Wasmer.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $host = getenv('SMTP_HOST');
+        $user = getenv('SMTP_USER');
+        $pass = getenv('SMTP_PASS');
+
+        if ($host && $user && $pass) {
+            $this->protocol    = 'smtp';
+            $this->SMTPHost    = $host;
+            $this->SMTPUser    = $user;
+            $this->SMTPPass    = $pass;
+            $this->SMTPPort    = (int) (getenv('SMTP_PORT') ?: 587);
+            $this->SMTPCrypto  = getenv('SMTP_CRYPTO') ?: 'tls';
+            $this->SMTPTimeout = 30;
+            $this->mailType    = 'html';
+            $this->fromEmail   = getenv('SMTP_FROM') ?: $user;
+            $this->fromName    = 'Little Doctors';
+        }
+    }
 }
