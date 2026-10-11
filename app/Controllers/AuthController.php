@@ -56,10 +56,10 @@ class AuthController extends Controller
                 ]);
             }
 
-            // Create login session (new session ID for safety)
+            // Create a new session ID for security
             session()->regenerate();
 
-            // Set normal CodeIgniter session variables
+            // Set CodeIgniter session variables
             session()->set([
                 'user_id'    => $user->id,
                 'user_name'  => $user->name,
@@ -67,29 +67,26 @@ class AuthController extends Controller
                 'logged_in'  => true
             ]);
 
-            // -------------------------------------------------
-            // SAVE SESSION VARIABLES IN SEPARATE TABLE
-            // -------------------------------------------------
-
+            // Record login details using the current table columns.
+            // No session_id column is used.
             $db->table('user_sessions')->insert([
                 'user_id'    => $user->id,
                 'user_name'  => $user->name,
                 'user_email' => $user->email,
-                'logged_in'  => 1,
-                'session_id' => session_id()
+                'logged_in'  => 1
             ]);
 
             // Login successful -> go to dashboard
             return redirect()->to(base_url('dashboard'));
 
         } catch (\Throwable $e) {
+            log_message('error', 'Login failed: ' . $e->getMessage());
 
             return view('auth/login', [
                 'error' => 'Unable to login. Please try again.'
             ]);
         }
     }
-
 
     /**
      * LOGOUT
@@ -100,7 +97,6 @@ class AuthController extends Controller
 
         return redirect()->to(base_url('login'));
     }
-
 
     /**
      * REGISTER
@@ -115,34 +111,19 @@ class AuthController extends Controller
         // Get request method
         $method = strtolower($this->request->getMethod());
 
-        // -------------------------------------------------
-        // GET REQUEST
-        // -------------------------------------------------
-        // When user opens /register, show registration page.
+        // Show registration page
         if ($method !== 'post') {
             return view('auth/register');
         }
 
-
-        // -------------------------------------------------
-        // GET FORM DATA
-        // -------------------------------------------------
-
+        // Get form data
         $name = trim((string) $this->request->getPost('name'));
-
         $email = trim((string) $this->request->getPost('email'));
-
         $password = (string) $this->request->getPost('password');
-
         $confirmPassword = (string) $this->request->getPost('confirm_password');
-
         $terms = $this->request->getPost('terms');
 
-
-        // -------------------------------------------------
-        // REQUIRED FIELDS
-        // -------------------------------------------------
-
+        // Required fields
         if (
             $name === '' ||
             $email === '' ||
@@ -156,11 +137,7 @@ class AuthController extends Controller
             ]);
         }
 
-
-        // -------------------------------------------------
-        // EMAIL VALIDATION
-        // -------------------------------------------------
-
+        // Email validation
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return view('auth/register', [
                 'error' => 'Please enter a valid email address.',
@@ -169,11 +146,7 @@ class AuthController extends Controller
             ]);
         }
 
-
-        // -------------------------------------------------
-        // PASSWORD MATCH
-        // -------------------------------------------------
-
+        // Password match
         if ($password !== $confirmPassword) {
             return view('auth/register', [
                 'error' => 'Passwords do not match.',
@@ -182,18 +155,13 @@ class AuthController extends Controller
             ]);
         }
 
-
-        // -------------------------------------------------
-        // STRONG PASSWORD VALIDATION
-        // -------------------------------------------------
-
+        // Strong password validation
         $strongPassword =
             strlen($password) >= 8 &&
             preg_match('/[A-Z]/', $password) &&
             preg_match('/[a-z]/', $password) &&
             preg_match('/[0-9]/', $password) &&
             preg_match('/[^A-Za-z0-9]/', $password);
-
 
         if (!$strongPassword) {
             return view('auth/register', [
@@ -203,11 +171,7 @@ class AuthController extends Controller
             ]);
         }
 
-
-        // -------------------------------------------------
-        // TERMS & CONDITIONS
-        // -------------------------------------------------
-
+        // Terms and conditions
         if (!$terms) {
             return view('auth/register', [
                 'error' => 'Please accept the Terms & Conditions.',
@@ -216,26 +180,15 @@ class AuthController extends Controller
             ]);
         }
 
-
-        // -------------------------------------------------
-        // DATABASE
-        // -------------------------------------------------
-
+        // Database operations
         try {
-
-            // Connect to Little Doctors database
             $db = \Config\Database::connect();
 
-
-            // -------------------------------------------------
-            // CHECK DUPLICATE EMAIL
-            // -------------------------------------------------
-
+            // Check duplicate email
             $existingUser = $db->table('users')
                 ->where('email', $email)
                 ->get()
                 ->getRow();
-
 
             if ($existingUser) {
                 return view('auth/register', [
@@ -245,21 +198,13 @@ class AuthController extends Controller
                 ]);
             }
 
-
-            // -------------------------------------------------
-            // HASH PASSWORD
-            // -------------------------------------------------
-
+            // Hash password
             $hashedPassword = password_hash(
                 $password,
                 PASSWORD_DEFAULT
             );
 
-
-            // -------------------------------------------------
-            // INSERT USER
-            // -------------------------------------------------
-
+            // Insert user
             $inserted = $db->table('users')->insert([
                 'name'       => $name,
                 'email'      => $email,
@@ -268,11 +213,7 @@ class AuthController extends Controller
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
 
-
-            // -------------------------------------------------
-            // CHECK INSERT
-            // -------------------------------------------------
-
+            // Check insert
             if (!$inserted) {
                 return view('auth/register', [
                     'error' => 'Registration failed. Please try again.',
@@ -281,10 +222,9 @@ class AuthController extends Controller
                 ]);
             }
 
-
         } catch (\Throwable $e) {
+            log_message('error', 'Registration failed: ' . $e->getMessage());
 
-            // Database error
             return view('auth/register', [
                 'error' => 'Registration failed. Please try again.',
                 'name'  => $name,
@@ -292,17 +232,7 @@ class AuthController extends Controller
             ]);
         }
 
-
-        // -------------------------------------------------
-        // REGISTRATION SUCCESS
-        // -------------------------------------------------
-        //
-        // IMPORTANT:
-        // This is OUTSIDE the database try/catch.
-        //
-        // The user has already been successfully inserted.
-        //
-
+        // Registration successful
         return view('auth/register_success');
     }
 }
