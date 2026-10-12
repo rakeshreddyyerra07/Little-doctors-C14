@@ -1,3 +1,4 @@
+
 <?= $this->extend('layout/main') ?>
 <?= $this->section('content') ?>
 
@@ -28,7 +29,11 @@
 
 <main class="page-wrapper" style="display:flex;justify-content:center;padding:64px 24px;">
   <div class="card" style="max-width:28rem;width:100%;">
-    <h1 style="color:var(--navy);font-size:1.6rem;margin-bottom:6px;text-align:center;">Join Little Doctors</h1>
+
+    <h1 style="color:var(--navy);font-size:1.6rem;margin-bottom:6px;text-align:center;">
+      Join Little Doctors
+    </h1>
+
     <p style="color:var(--gray);font-size:.95rem;margin-bottom:22px;text-align:center;">
       Create your Little Doctors account
     </p>
@@ -39,59 +44,110 @@
       </div>
     <?php endif; ?>
 
-    <form method="post" action="<?= site_url('register') ?>">
+    <?php if (isset($validation)): ?>
+      <div style="background:#fde3e0;color:#a3311f;padding:.7rem 1rem;border-radius:8px;margin-bottom:1.2rem;font-size:.9rem;">
+        <?= $validation->listErrors() ?>
+      </div>
+    <?php endif; ?>
+
+    <form id="registerForm" method="post" action="<?= site_url('register') ?>">
       <?= csrf_field() ?>
 
       <div style="margin-bottom:1.1rem;">
-        <label for="name" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">Name</label>
+        <label for="name" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">
+          Name
+        </label>
+
         <input
-          type="text" id="name" name="name"
-          placeholder="Enter your name" value="<?= esc($name ?? '') ?>" required
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter your name"
+          value="<?= esc(old('name', $name ?? '')) ?>"
+          required
+          maxlength="100"
+          autocomplete="name"
           style="width:100%;padding:.65rem .8rem;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg-blue);"
         >
       </div>
 
       <div style="margin-bottom:1.1rem;">
-        <label for="email" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">Email</label>
+        <label for="email" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">
+          Email
+        </label>
+
         <input
-          type="email" id="email" name="email"
-          placeholder="Enter your email" value="<?= esc($email ?? '') ?>" required
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter your email"
+          value="<?= esc(old('email', $email ?? '')) ?>"
+          required
+          maxlength="254"
+          autocomplete="email"
           style="width:100%;padding:.65rem .8rem;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg-blue);"
         >
       </div>
 
       <div style="margin-bottom:1.1rem;">
-        <label for="password" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">Password</label>
+        <label for="password" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">
+          Password
+        </label>
+
         <div style="position:relative;">
           <input
-            type="password" id="password" name="password"
-            placeholder="Create a password" required
-            style="width:100%;padding:.65rem .8rem;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg-blue);"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Create a password"
+            required
+            minlength="8"
+            autocomplete="new-password"
+            style="width:100%;padding:.65rem 4rem .65rem .8rem;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg-blue);"
           >
+
           <button
-            type="button" onclick="togglePassword('password', this)"
+            type="button"
+            onclick="togglePassword('password', this)"
             style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--teal);font-weight:700;font-size:.8rem;cursor:pointer;"
           >Show</button>
         </div>
       </div>
 
       <div style="margin-bottom:1.1rem;">
-        <label for="confirmPassword" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">Confirm Password</label>
+        <label for="confirmPassword" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">
+          Confirm Password
+        </label>
+
         <div style="position:relative;">
           <input
-            type="password" id="confirmPassword" name="confirm_password"
-            placeholder="Confirm your password" required
-            style="width:100%;padding:.65rem .8rem;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg-blue);"
+            type="password"
+            id="confirmPassword"
+            name="confirm_password"
+            placeholder="Confirm your password"
+            required
+            autocomplete="new-password"
+            style="width:100%;padding:.65rem 4rem .65rem .8rem;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg-blue);"
           >
+
           <button
-            type="button" onclick="togglePassword('confirmPassword', this)"
+            type="button"
+            onclick="togglePassword('confirmPassword', this)"
             style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--teal);font-weight:700;font-size:.8rem;cursor:pointer;"
           >Show</button>
         </div>
       </div>
 
       <div style="display:flex;align-items:flex-start;gap:.5rem;margin:1rem 0 1.2rem;font-size:.82rem;color:var(--gray);line-height:1.5;">
-        <input type="checkbox" id="terms" name="terms" value="1" required style="margin-top:3px;">
+        <input
+          type="checkbox"
+          id="terms"
+          name="terms"
+          value="1"
+          required
+          style="margin-top:3px;"
+        >
+
         <label for="terms" style="font-weight:400;color:var(--gray);">
           I agree to the
           <a href="#" onclick="return false;" style="color:var(--teal);font-weight:700;">Terms &amp; Conditions</a>
@@ -100,18 +156,38 @@
         </label>
       </div>
 
-      <button type="submit" class="btn btn-solid" style="width:100%;justify-content:center;">Create Account</button>
+      <button type="submit" class="btn btn-solid" style="width:100%;justify-content:center;">
+        Create Account
+      </button>
     </form>
 
     <div style="text-align:center;font-size:.9rem;color:var(--gray);margin-top:1.2rem;">
-      Already have an account? <a href="<?= base_url('login') ?>" style="color:var(--teal);font-weight:700;">Login</a>
+      Already have an account?
+      <a href="<?= base_url('login') ?>" style="color:var(--teal);font-weight:700;">
+        Login
+      </a>
     </div>
+
   </div>
 </main>
+
+<style>
+  #registerForm .validation-error {
+    display: block;
+    color: #dc2626;
+    font-size: 13px;
+    margin-top: 5px;
+  }
+
+  #registerForm input.error {
+    border-color: #dc2626 !important;
+  }
+</style>
 
 <script>
 function togglePassword(inputId, button) {
     const input = document.getElementById(inputId);
+
     if (input.type === "password") {
         input.type = "text";
         button.textContent = "Hide";
@@ -120,6 +196,82 @@ function togglePassword(inputId, button) {
         button.textContent = "Show";
     }
 }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    $('#registerForm').validate({
+        rules: {
+            name: {
+                required: true,
+                minlength: 2,
+                maxlength: 100
+            },
+            email: {
+                required: true,
+                email: true,
+                maxlength: 254
+            },
+            password: {
+                required: true,
+                minlength: 8
+            },
+            confirm_password: {
+                required: true,
+                equalTo: '#password'
+            },
+            terms: {
+                required: true
+            }
+        },
+
+        messages: {
+            name: {
+                required: 'Please enter your name.',
+                minlength: 'Name must contain at least 2 characters.',
+                maxlength: 'Name cannot exceed 100 characters.'
+            },
+            email: {
+                required: 'Please enter your email address.',
+                email: 'Please enter a valid email address.',
+                maxlength: 'Email cannot exceed 254 characters.'
+            },
+            password: {
+                required: 'Please create a password.',
+                minlength: 'Password must be at least 8 characters.'
+            },
+            confirm_password: {
+                required: 'Please confirm your password.',
+                equalTo: 'Passwords do not match.'
+            },
+            terms: {
+                required: 'Please accept the Terms & Conditions and Privacy Policy.'
+            }
+        },
+
+        errorElement: 'div',
+        errorClass: 'validation-error',
+
+        errorPlacement: function (error, element) {
+            if (element.attr('name') === 'terms') {
+                error.insertAfter(element.closest('div'));
+            } else {
+                error.insertAfter(element);
+            }
+        },
+
+        highlight: function (element) {
+            $(element).addClass('error');
+        },
+
+        unhighlight: function (element) {
+            $(element).removeClass('error');
+        }
+    });
+});
 </script>
 
 <?= $this->endSection() ?>

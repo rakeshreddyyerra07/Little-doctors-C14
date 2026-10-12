@@ -25,12 +25,12 @@ class Cache extends BaseConfig
     public string $reservedCharacters = '{}()/\@:';
 
     /**
-     * Cache stored in /tmp because the app folder is read-only on Wasmer.
+     * Cache storage directory.
      *
      * @var array{storePath?: string, mode?: int}
      */
     public array $file = [
-        'storePath' => '/tmp/ci4-cache/',
+        'storePath' => WRITEPATH . 'cache/',
         'mode'      => 0640,
     ];
 
@@ -52,6 +52,8 @@ class Cache extends BaseConfig
     ];
 
     /**
+     * Available cache handlers.
+     *
      * @var array<string, class-string<CacheInterface>>
      */
     public array $validHandlers = [
@@ -67,6 +69,8 @@ class Cache extends BaseConfig
     public $cacheQueryString = false;
 
     /**
+     * HTTP status codes eligible for response caching.
+     *
      * @var list<int>
      */
     public array $cacheStatusCodes = [];

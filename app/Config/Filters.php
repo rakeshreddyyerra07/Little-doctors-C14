@@ -16,9 +16,6 @@ use CodeIgniter\Filters\SecureHeaders;
 class Filters extends BaseFilters
 {
     /**
-     * Configures aliases for Filter classes to
-     * make reading things nicer and simpler.
-     *
      * @var array<string, class-string|list<class-string>>
      */
     public array $aliases = [
@@ -34,14 +31,14 @@ class Filters extends BaseFilters
 
         // Little Doctors: login check for the dashboard
         'auth'          => \App\Filters\AuthFilter::class,
+
+        // Little Doctors: login logs, validation, admin
+        'loginlog'      => \App\Filters\LoginLogFilter::class,
+        'authvalidate'  => \App\Filters\AuthValidateFilter::class,
+        'admin'         => \App\Filters\AdminFilter::class,
     ];
 
     /**
-     * List of special required filters.
-     *
-     * The filters listed here are special. They are applied before and after
-     * other kinds of filters, and always applied even if a route does not exist.
-     *
      * @var array{before: list<string>, after: list<string>}
      */
     public array $required = [
@@ -57,9 +54,6 @@ class Filters extends BaseFilters
     ];
 
     /**
-     * List of filter aliases that are always
-     * applied before and after every request.
-     *
      * @var array<string, array<string, array<string, string>>>|array<string, list<string>>
      */
     public array $globals = [
@@ -75,17 +69,11 @@ class Filters extends BaseFilters
     ];
 
     /**
-     * List of filter aliases that works on a
-     * particular HTTP method (GET, POST, etc.).
-     *
      * @var array<string, list<string>>
      */
     public array $methods = [];
 
     /**
-     * List of filter aliases that should run on any
-     * before or after URI patterns.
-     *
      * @var array<string, array<string, list<string>>>
      */
     public array $filters = [];

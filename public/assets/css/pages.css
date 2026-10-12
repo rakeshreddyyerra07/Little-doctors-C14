@@ -1,0 +1,65 @@
+/* nav active state */
+header.site .links a.active { color: var(--teal); }
+
+/* page banner */
+.page-hero { padding: 48px 0 20px; text-align: center; }
+.page-hero h1 { margin: 0 0 8px; color: var(--navy); }
+.page-hero p { margin: 0 auto; max-width: 620px; color: var(--gray, #6b7280); }
+
+/* same image rules your home page uses inline */
+.camp-photo { position: relative !important; overflow: hidden; }
+.camp-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.camp-photo .camp-tag { position: absolute; z-index: 2; }
+.test-who .t-photo { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: none; background: #e2e8f0; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+
+/* hover lift */
+.lab-card, .camp-card, .test-card, .trust-item, .event-row, .panel { transition: transform .25s ease, box-shadow .25s ease; }
+.lab-card:hover, .camp-card:hover, .test-card:hover, .trust-item:hover, .event-row:hover { transform: translateY(-6px); box-shadow: 0 14px 28px rgba(18,48,90,.12); }
+
+/* learning lab "read more" */
+details.more summary { cursor: pointer; list-style: none; font-weight: 700; }
+details.more summary::-webkit-details-marker { display: none; }
+.more-body { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--gray, #6b7280); animation: fadeDown .3s ease; }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+/* events */
+.event-list { display: grid; gap: 14px; }
+.event-row { display: flex; gap: 18px; align-items: center; background: #fff; border: 1px solid var(--line, #e5e7eb); border-radius: 14px; padding: 16px 18px; }
+.event-date { min-width: 70px; text-align: center; background: var(--navy); color: #fff; border-radius: 12px; padding: 10px 6px; }
+.event-date b { display: block; font-size: 24px; line-height: 1; }
+.event-date small { text-transform: uppercase; font-size: 12px; letter-spacing: .5px; }
+.event-info { flex: 1; }
+.event-info h4 { margin: 4px 0; }
+.event-tag { font-size: 11px; font-weight: 800; color: var(--teal); }
+.status { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.status.upcoming { background: #d1fae5; color: #065f46; }
+.status.done { background: #e5e7eb; color: #4b5563; }
+@media (max-width: 600px) { .event-row { flex-wrap: wrap; } }
+
+/* contact */
+.contact-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: start; }
+@media (max-width: 800px) { .contact-grid { grid-template-columns: 1fr; } }
+.panel { background: #fff; border: 1px solid var(--line, #e5e7eb); border-radius: 16px; padding: 24px; }
+.panel h3 { margin-top: 0; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+.field input, .field textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--line, #e5e7eb); border-radius: 10px; font: inherit; box-sizing: border-box; transition: border-color .2s, box-shadow .2s; }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(31,181,168,.18); }
+.hp { position: absolute; left: -9999px; opacity: 0; }
+.alert-ok { background: #d1fae5; color: #065f46; padding: 10px 14px; border-radius: 10px; margin-bottom: 14px; }
+.alert-err { background: #fee2e2; color: #991b1b; padding: 10px 14px; border-radius: 10px; margin-bottom: 14px; }
+label.error { color: #b91c1c; font-size: 13px; margin-top: 4px; display: block; }
+input.error, textarea.error { border-color: #b91c1c; }
+.contact-info { list-style: none; padding: 0; margin: 0; }
+.contact-info li { margin-bottom: 12px; }
+.contact-info a { color: inherit; }
+.map-frame { width: 100%; height: 240px; border: 0; border-radius: 12px; margin-top: 14px; }
+
+/* social links (page + footer) */
+.social-links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+.social-links a { color: inherit; opacity: .85; text-decoration: none; font-weight: 700; transition: opacity .2s, transform .2s; }
+.social-links a:hover { opacity: 1; transform: translateY(-2px); }
+
+.empty { text-align: center; color: var(--gray, #6b7280); padding: 30px 0; grid-column: 1 / -1; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

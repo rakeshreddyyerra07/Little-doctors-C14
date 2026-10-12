@@ -7,8 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/animations.css') ?>">
 </head>
 <body>
 <?= $this->renderSection('content') ?>
+<script src="<?= base_url('assets/js/animations.js') ?>" defer></script>
 </body>
 </html>

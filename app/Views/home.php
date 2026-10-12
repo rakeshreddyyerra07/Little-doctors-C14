@@ -592,156 +592,17 @@ footer.site .brand {
 
 
 <!-- =========================================================
-     LEARNING LAB
+     LEARNING LAB  (now from the database)
 ========================================================= -->
 
-<section id="lab">
-
-  <div class="wrap">
-
-    <div class="section-head">
-      <h2>Little Doctors Learning Lab</h2>
-      <a href="#">View all topics →</a>
-    </div>
-
-    <div class="lab-grid">
-
-      <div class="lab-card">
-        <div class="ic" style="background:#ffe7ec">
-          <span style="font-size:28px;line-height:1;">🧠</span>
-        </div>
-        <h4>Brain</h4>
-        <p>Uncover how your brain helps you think, feel and move.</p>
-        <a class="go" style="color:var(--pink)" href="#">Explore →</a>
-      </div>
-
-      <div class="lab-card">
-        <div class="ic" style="background:#ffe7e2">
-          <span style="font-size:28px;line-height:1;">❤️</span>
-        </div>
-        <h4>Heart</h4>
-        <p>Learn how your heart pumps blood to keep you strong.</p>
-        <a class="go" style="color:var(--coral)" href="#">Explore →</a>
-      </div>
-
-      <div class="lab-card">
-        <div class="ic" style="background:#e7effb">
-          <span style="font-size:28px;line-height:1;">🫁</span>
-        </div>
-        <h4>Lungs</h4>
-        <p>See how your lungs help you breathe fresh air.</p>
-        <a class="go" style="color:var(--navy)" href="#">Explore →</a>
-      </div>
-
-      <div class="lab-card">
-        <div class="ic" style="background:#f2eefc">
-          <span style="font-size:28px;line-height:1;">🦴</span>
-        </div>
-        <h4>Bones</h4>
-        <p>Find out how your skeleton supports you every day.</p>
-        <a class="go" style="color:var(--purple)" href="#">Explore →</a>
-      </div>
-
-      <div class="lab-card">
-        <div class="ic" style="background:#e6f8ec">
-          <span style="font-size:28px;line-height:1;">🍎</span>
-        </div>
-        <h4>Nutrition</h4>
-        <p>Good food helps your body grow and stay healthy.</p>
-        <a class="go" style="color:var(--green)" href="#">Explore →</a>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
+<?= $this->include('home/lab') ?>
 
 
 <!-- =========================================================
-     CAMPS
+     CAMPS  (now from the database)
 ========================================================= -->
 
-<section class="camps" id="camps">
-
-  <div class="wrap">
-
-    <div class="section-head">
-      <h2>Find your next Little Doctors adventure</h2>
-      <a href="#">View all camps →</a>
-    </div>
-
-    <div class="camp-grid">
-
-      <div class="camp-card">
-
-        <div class="camp-photo">
-          <img src="<?= base_url('assets/images/camp-1.jpg') ?>" alt="Little Doctors Camp">
-          <span class="camp-tag">SUMMER CAMP</span>
-        </div>
-
-        <div class="camp-body">
-          <h4>Little Doctors Camp</h4>
-          <div class="camp-meta">
-            <span>📅 Jun 15 – Jun 19, 2026</span>
-            <span>📍 Boston, MA</span>
-            <span>👤 Ages 8 – 14</span>
-          </div>
-          <a class="btn btn-solid" href="#">Explore Camp →</a>
-        </div>
-
-      </div>
-
-
-      <div class="camp-card">
-
-        <div class="camp-photo">
-          <img src="<?= base_url('assets/images/camp-2.jpg') ?>" alt="Heart and Health Workshop">
-          <span class="camp-tag">WEEKEND WORKSHOP</span>
-        </div>
-
-        <div class="camp-body">
-          <h4>Heart &amp; Health Workshop</h4>
-          <div class="camp-meta">
-            <span>📅 Jul 12 – Jul 13, 2026</span>
-            <span>📍 New York, NY</span>
-            <span>👤 Ages 7 – 12</span>
-          </div>
-          <a class="btn btn-solid" href="#">Explore Workshop →</a>
-        </div>
-
-      </div>
-
-
-      <div class="camp-card">
-
-        <div class="camp-photo">
-          <img src="<?= base_url('assets/images/camp-3.jpg') ?>" alt="Human Body Explorer Camp">
-          <span class="camp-tag">SCIENCE CAMP</span>
-        </div>
-
-        <div class="camp-body">
-          <h4>Human Body Explorer Camp</h4>
-          <div class="camp-meta">
-            <span>📅 Aug 2 – Aug 6, 2026</span>
-            <span>📍 Chicago, IL</span>
-            <span>👤 Ages 8 – 14</span>
-          </div>
-          <a class="btn btn-solid" href="#">Explore Camp →</a>
-        </div>
-
-      </div>
-
-    </div>
-
-    <p class="camps-foot">
-      Can't find a camp near you?
-      <a href="#">Join the interest list →</a>
-    </p>
-
-  </div>
-
-</section>
+<?= $this->include('home/camps') ?>
 
 
 <!-- =========================================================
@@ -813,51 +674,10 @@ footer.site .brand {
 
 
 <!-- =========================================================
-     STORIES  (photos added here)
+     STORIES  (now from the database)
 ========================================================= -->
 
-<section class="testimonials" id="stories">
-
-  <div class="wrap">
-
-    <div class="pillars-head">
-      <h2>What our Little Doctors say</h2>
-    </div>
-
-    <div class="test-grid">
-
-      <div class="test-card">
-        <div class="stars">★★★★★</div>
-        <p>"I love Little Doctors because I learn so many new things about the human body in a fun way!"</p>
-        <div class="test-who">
-          <img class="t-photo" src="<?= base_url('assets/images/t-1.png') ?>" alt="Neha">
-          Neha, Age 10
-        </div>
-      </div>
-
-      <div class="test-card">
-        <div class="stars">★★★★★</div>
-        <p>"The activities and games are awesome! I now know how my heart works."</p>
-        <div class="test-who">
-          <img class="t-photo" src="<?= base_url('assets/images/t-2.png') ?>" alt="Aarav">
-          Aarav, Age 9
-        </div>
-      </div>
-
-      <div class="test-card">
-        <div class="stars">★★★★★</div>
-        <p>"It's the best camp ever! I want to be a doctor when I grow up."</p>
-        <div class="test-who">
-          <img class="t-photo" src="<?= base_url('assets/images/t-3.png') ?>" alt="Diya">
-          Diya, Age 11
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
+<?= $this->include('home/stories') ?>
 
 
 <!-- =========================================================
@@ -893,26 +713,10 @@ footer.site .brand {
 
 
 <!-- =========================================================
-     FOOTER
+     FOOTER  (text and social links now from settings)
 ========================================================= -->
 
-<footer class="site">
-
-  <div class="wrap">
-
-    <a class="brand" href="#">
-      <img
-        src="<?= base_url('assets/images/logo.png') ?>"
-        alt="Little Doctors logo"
-        style="height:100px"
-      >
-    </a>
-
-    <p>© 2026 Little Doctors. Caring today, healthy tomorrow.</p>
-
-  </div>
-
-</footer>
+<?= $this->include('partials/site_footer') ?>
 
 
 <?= $this->endSection() ?>
