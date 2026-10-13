@@ -1,11 +1,20 @@
 <?php
+helper('format');
+
+$courses = [];
+$err     = '';
+
 try {
-    $courses = (new \App\Models\LearningCourseModel())
-        ->where('is_active', 1)->orderBy('sort_order', 'ASC')->orderBy('id', 'ASC')->findAll();
+    $courses = active_rows('learning_courses');
 } catch (\Throwable $e) {
-    $courses = [];
+    $err = $e->getMessage();
 }
 ?>
+<!-- lab: <?= count($courses) ?> rows<?= $err ? ' | ERROR: ' . str_replace('--', '- -', esc($err)) : '' ?> -->
+<style>
+    .lab-card .lab-img { display:block; width:96px; height:96px; object-fit:contain; margin:0 auto 10px; }
+</style>
+
 <section id="lab">
 
   <div class="wrap">
@@ -19,13 +28,19 @@ try {
 
       <?php foreach ($courses as $c): ?>
         <div class="lab-card">
-          <div class="ic" style="background:<?= esc($c['bg_color'] ?: '#e7effb') ?>">
-            <span style="font-size:28px;line-height:1;"><?= esc($c['icon'] ?: '🩺') ?></span>
-          </div>
-          <h4><?= esc($c['title']) ?></h4>
-          <p><?= esc($c['short_description']) ?></p>
-          <a class="go" style="color:<?= esc($c['accent_color'] ?: 'var(--navy)') ?>"
-             href="<?= base_url('learn') . '#' . esc($c['slug']) ?>">Explore →</a>
+
+          <?php if (! empty($c['image'])): ?>
+            <img class="lab-img" src="<?= base_url($c['image']) ?>" alt="<?= esc($c['title'] ?? '') ?>">
+          <?php else: ?>
+            <div class="ic" style="background:<?= esc(($c['bg_color'] ?? '') ?: '#e7effb') ?>">
+              <span style="font-size:28px;line-height:1;"><?= esc(($c['icon'] ?? '') ?: '🩺') ?></span>
+            </div>
+          <?php endif; ?>
+
+          <h4><?= esc($c['title'] ?? '') ?></h4>
+          <p><?= esc($c['short_description'] ?? '') ?></p>
+          <a class="go" style="color:<?= esc(($c['accent_color'] ?? '') ?: 'var(--navy)') ?>"
+             href="<?= base_url('learn') . '#' . esc($c['slug'] ?? '') ?>">Explore →</a>
         </div>
       <?php endforeach; ?>
 
