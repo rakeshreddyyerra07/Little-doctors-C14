@@ -29,7 +29,10 @@
 
 <main class="page-wrapper" style="display:flex;justify-content:center;padding:64px 24px;">
   <div class="card" style="max-width:26rem;width:100%;">
-    <h1 style="color:var(--navy);font-size:1.6rem;margin-bottom:6px;">Welcome Back!</h1>
+
+    <h1 style="color:var(--navy);font-size:1.6rem;margin-bottom:6px;">
+      Welcome Back!
+    </h1>
 
     <p style="color:var(--gray);font-size:.95rem;margin-bottom:22px;">
       Sign in to continue your Little Doctors journey.
@@ -56,11 +59,19 @@
     <form id="loginForm" action="<?= base_url('login') ?>" method="post">
       <?= csrf_field() ?>
 
-      <!-- Added: stores browser latitude and longitude -->
-      <input type="hidden" id="latlang" name="latlang" value="">
+      <!-- Browser latitude and longitude -->
+      <input
+        type="hidden"
+        id="latlang"
+        name="latlang"
+        value=""
+      >
 
       <div style="margin-bottom:1.1rem;">
-        <label for="email" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">
+        <label
+          for="email"
+          style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;"
+        >
           Email
         </label>
 
@@ -77,7 +88,10 @@
       </div>
 
       <div style="margin-bottom:.6rem;">
-        <label for="password" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">
+        <label
+          for="password"
+          style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;"
+        >
           Password
         </label>
 
@@ -102,22 +116,34 @@
       </div>
 
       <div style="text-align:right;margin-bottom:1.1rem;">
-        <a href="<?= base_url('forgot-password') ?>" style="color:var(--teal);font-weight:700;font-size:.85rem;text-decoration:none;">
+        <a
+          href="<?= base_url('forgot-password') ?>"
+          style="color:var(--teal);font-weight:700;font-size:.85rem;text-decoration:none;"
+        >
           Forgot password?
         </a>
       </div>
 
-      <button type="submit" class="btn btn-solid" style="width:100%;justify-content:center;">
+      <button
+        type="submit"
+        id="loginSubmit"
+        class="btn btn-solid"
+        style="width:100%;justify-content:center;"
+      >
         Login
       </button>
     </form>
 
     <div style="text-align:center;font-size:.9rem;color:var(--gray);margin-top:1.2rem;">
       Don't have an account?
-      <a href="<?= base_url('register') ?>" style="color:var(--teal);font-weight:700;">
+      <a
+        href="<?= base_url('register') ?>"
+        style="color:var(--teal);font-weight:700;"
+      >
         Register
       </a>
     </div>
+
   </div>
 </main>
 
@@ -131,6 +157,11 @@
 
   #loginForm input.error {
     border-color: #dc2626 !important;
+  }
+
+  #loginSubmit:disabled {
+    opacity: 0.7;
+    cursor: wait;
   }
 </style>
 
@@ -154,6 +185,7 @@ function togglePassword() {
 
 <script>
 $(document).ready(function () {
+
     $('#loginForm').validate({
         rules: {
             email: {
@@ -192,34 +224,74 @@ $(document).ready(function () {
             $(element).removeClass('error');
         },
 
-        // Added: capture location after form validation succeeds.
         submitHandler: function (form) {
             const locationField = document.getElementById('latlang');
+            const submitButton = document.getElementById('loginSubmit');
+
+            // Prevent repeated clicks while obtaining location.
+            submitButton.disabled = true;
+            submitButton.textContent = 'Getting location...';
 
             function submitLogin() {
+                // Submit without triggering jQuery validation again.
                 HTMLFormElement.prototype.submit.call(form);
             }
 
-            if (!navigator.geolocation) {
+            function fallbackSubmit(message) {
+                console.warn('Location unavailable:', message);
+
+                locationField.value = '';
+
+                // Login should continue if location is unavailable.
                 submitLogin();
+            }
+
+            if (!navigator.geolocation) {
+                fallbackSubmit(
+                    'Geolocation is not supported by this browser.'
+                );
+
                 return false;
             }
 
             navigator.geolocation.getCurrentPosition(
                 function (position) {
-                    locationField.value =
-                        position.coords.latitude + ',' +
-                        position.coords.longitude;
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    locationField.value = latitude + ',' + longitude;
+
+                    console.log(
+                        'Location captured:',
+                        locationField.value
+                    );
 
                     submitLogin();
                 },
-                function () {
-                    // Login continues if location is denied or unavailable.
-                    submitLogin();
+
+                function (error) {
+                    let message = 'Unknown location error.';
+
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            message = 'Location permission denied.';
+                            break;
+
+                        case error.POSITION_UNAVAILABLE:
+                            message = 'Location is unavailable.';
+                            break;
+
+                        case error.TIMEOUT:
+                            message = 'Location request timed out.';
+                            break;
+                    }
+
+                    fallbackSubmit(message);
                 },
+
                 {
                     enableHighAccuracy: false,
-                    timeout: 5000,
+                    timeout: 15000,
                     maximumAge: 60000
                 }
             );
@@ -227,6 +299,7 @@ $(document).ready(function () {
             return false;
         }
     });
+
 });
 </script>
 
