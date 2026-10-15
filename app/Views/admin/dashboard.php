@@ -1,7 +1,22 @@
 <?= $this->extend('admin/layout') ?>
 <?= $this->section('content') ?>
 
+<style>
+    .quick { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:24px; }
+    .quick a.stat { text-decoration:none; color:var(--navy); font-weight:bold; }
+    .quick a.stat span { display:block; font-weight:normal; font-size:13px; color:var(--gray); margin-top:4px; }
+</style>
+
 <h1>Overview</h1>
+
+<div class="quick">
+    <a class="stat" href="<?= base_url('admin/slides') ?>">Home Slides<span>Create, edit, delete</span></a>
+    <a class="stat" href="<?= base_url('admin/content/camps') ?>">Camps<span>Create, edit, delete</span></a>
+    <a class="stat" href="<?= base_url('admin/content/courses') ?>">Learning Lab<span>Courses</span></a>
+    <a class="stat" href="<?= base_url('admin/content/testimonials') ?>">Testimonials<span>Stories</span></a>
+    <a class="stat" href="<?= base_url('admin/settings') ?>">Settings<span>Contact and social links</span></a>
+</div>
+
 <div class="stats">
     <div class="stat"><b><?= $totalUsers ?></b>Total users</div>
     <div class="stat"><b><?= $successToday ?></b>Successful logins today</div>
