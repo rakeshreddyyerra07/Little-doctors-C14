@@ -59,7 +59,6 @@
     <form id="loginForm" action="<?= base_url('login') ?>" method="post">
       <?= csrf_field() ?>
 
-      <!-- Browser latitude and longitude -->
       <input
         type="hidden"
         id="latlang"
@@ -81,6 +80,7 @@
           name="email"
           value="<?= esc(old('email') ?? '') ?>"
           placeholder="Enter your email"
+          maxlength="254"
           required
           autocomplete="email"
           style="width:100%;padding:.65rem .8rem;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--bg-blue);"
@@ -109,7 +109,6 @@
           <button
             type="button"
             id="passwordToggle"
-            onclick="togglePassword()"
             style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--teal);font-weight:700;font-size:.8rem;cursor:pointer;"
           >Show</button>
         </div>
@@ -166,140 +165,116 @@
 </style>
 
 <script>
-function togglePassword() {
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('loginForm');
+    const email = document.getElementById('email');
     const password = document.getElementById('password');
-    const button = document.getElementById('passwordToggle');
+    const passwordToggle = document.getElementById('passwordToggle');
+    const locationField = document.getElementById('latlang');
+    const submitButton = document.getElementById('loginSubmit');
 
-    if (password.type === 'password') {
-        password.type = 'text';
-        button.textContent = 'Hide';
-    } else {
-        password.type = 'password';
-        button.textContent = 'Show';
+    if (!form) {
+        return;
     }
-}
-</script>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
-
-<script>
-$(document).ready(function () {
-
-    $('#loginForm').validate({
-        rules: {
-            email: {
-                required: true,
-                email: true,
-                maxlength: 254
-            },
-            password: {
-                required: true
-            }
-        },
-
-        messages: {
-            email: {
-                required: 'Please enter your email address.',
-                email: 'Please enter a valid email address.',
-                maxlength: 'Email cannot exceed 254 characters.'
-            },
-            password: {
-                required: 'Please enter your password.'
-            }
-        },
-
-        errorElement: 'div',
-        errorClass: 'validation-error',
-
-        errorPlacement: function (error, element) {
-            error.insertAfter(element);
-        },
-
-        highlight: function (element) {
-            $(element).addClass('error');
-        },
-
-        unhighlight: function (element) {
-            $(element).removeClass('error');
-        },
-
-        submitHandler: function (form) {
-            const locationField = document.getElementById('latlang');
-            const submitButton = document.getElementById('loginSubmit');
-
-            // Prevent repeated clicks while obtaining location.
-            submitButton.disabled = true;
-            submitButton.textContent = 'Getting location...';
-
-            function submitLogin() {
-                // Submit without triggering jQuery validation again.
-                HTMLFormElement.prototype.submit.call(form);
-            }
-
-            function fallbackSubmit(message) {
-                console.warn('Location unavailable:', message);
-
-                locationField.value = '';
-
-                // Login should continue if location is unavailable.
-                submitLogin();
-            }
-
-            if (!navigator.geolocation) {
-                fallbackSubmit(
-                    'Geolocation is not supported by this browser.'
-                );
-
-                return false;
-            }
-
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    const latitude = position.coords.latitude;
-                    const longitude = position.coords.longitude;
-
-                    locationField.value = latitude + ',' + longitude;
-
-                    console.log(
-                        'Location captured:',
-                        locationField.value
-                    );
-
-                    submitLogin();
-                },
-
-                function (error) {
-                    let message = 'Unknown location error.';
-
-                    switch (error.code) {
-                        case error.PERMISSION_DENIED:
-                            message = 'Location permission denied.';
-                            break;
-
-                        case error.POSITION_UNAVAILABLE:
-                            message = 'Location is unavailable.';
-                            break;
-
-                        case error.TIMEOUT:
-                            message = 'Location request timed out.';
-                            break;
-                    }
-
-                    fallbackSubmit(message);
-                },
-
-                {
-                    enableHighAccuracy: false,
-                    timeout: 15000,
-                    maximumAge: 60000
-                }
-            );
-
-            return false;
+    // Show or hide the password.
+    passwordToggle.addEventListener('click', function () {
+        if (password.type === 'password') {
+            password.type = 'text';
+            passwordToggle.textContent = 'Hide';
+        } else {
+            password.type = 'password';
+            passwordToggle.textContent = 'Show';
         }
     });
 
+    // Validate email length and format.
+    email.addEventListener('input', function () {
+        email.setCustomValidity('');
+
+        if (email.value.length > 254) {
+            email.setCustomValidity(
+                'Email cannot exceed 254 characters.'
+            );
+        } else if (
+            email.value !== '' &&
+            !email.validity.typeMismatch &&
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)
+        ) {
+            email.setCustomValidity(
+                'Please enter a valid email address.'
+            );
+        }
+    });
+
+    // Validate and submit the login form.
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        email.setCustomValidity('');
+
+        if (email.value.length > 254) {
+            email.setCustomValidity(
+                'Email cannot exceed 254 characters.'
+            );
+        }
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Getting location...';
+
+        function submitLogin() {
+            HTMLFormElement.prototype.submit.call(form);
+        }
+
+        function fallbackSubmit(message) {
+            console.warn('Location unavailable:', message);
+            locationField.value = '';
+            submitLogin();
+        }
+
+        if (!navigator.geolocation) {
+            fallbackSubmit('Geolocation is not supported.');
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                locationField.value =
+                    position.coords.latitude + ',' +
+                    position.coords.longitude;
+
+                console.log('Location captured:', locationField.value);
+                submitLogin();
+            },
+            function (error) {
+                let message = 'Unknown location error.';
+
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        message = 'Location permission denied.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message = 'Location is unavailable.';
+                        break;
+                    case error.TIMEOUT:
+                        message = 'Location request timed out.';
+                        break;
+                }
+
+                fallbackSubmit(message);
+            },
+            {
+                enableHighAccuracy: false,
+                timeout: 15000,
+                maximumAge: 60000
+            }
+        );
+    });
 });
 </script>
 
