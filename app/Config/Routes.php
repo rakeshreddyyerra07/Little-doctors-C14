@@ -51,6 +51,7 @@ $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
     $routes->get('dashboard', 'Admin::index');
     $routes->get('users', 'Admin::users');
     $routes->get('logs', 'Admin::logs');
+    $routes->get('ip-check', 'IpCheck::index');
 
     // Site settings: contact details and social media
     $routes->get('settings', 'AdminSettings::index');
