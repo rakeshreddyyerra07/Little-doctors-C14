@@ -8,6 +8,7 @@ class AuthController extends Controller
 {
     /**
      * SAVE LOGIN LOG
+     * Converts latitude/longitude into a readable location.
      */
     private function saveLoginLog(
         string $email,
@@ -32,24 +33,121 @@ class AuthController extends Controller
 
             $userId = $user ? $user->id : null;
 
-            // Preserve the existing login log fields and add audit fields.
+            // Default location when coordinates are unavailable.
+            $location = null;
+
+            // Validate the latitude,longitude format.
+            if (
+                $latlang !== null &&
+                preg_match(
+                    '/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/',
+                    $latlang,
+                    $matches
+                )
+            ) {
+                $latitude = (float) $matches[1];
+                $longitude = (float) $matches[2];
+
+                if (
+                    $latitude >= -90 &&
+                    $latitude <= 90 &&
+                    $longitude >= -180 &&
+                    $longitude <= 180
+                ) {
+                    try {
+                        // Reverse geocode using OpenStreetMap Nominatim.
+                        $client = \Config\Services::curlrequest([
+                            'timeout'         => 3,
+                            'connect_timeout' => 2,
+                        ]);
+
+                        $response = $client->get(
+                            'https://nominatim.openstreetmap.org/reverse',
+                            [
+                                'query' => [
+                                    'format' => 'jsonv2',
+                                    'lat'    => $latitude,
+                                    'lon'    => $longitude,
+                                    'zoom'   => 14,
+                                ],
+                                'headers' => [
+                                    'User-Agent' =>
+                                        'LittleDoctorsCI4/1.0',
+                                ],
+                            ]
+                        );
+
+                        if ($response->getStatusCode() === 200) {
+                            $result = json_decode(
+                                $response->getBody(),
+                                true
+                            );
+
+                            if (is_array($result)) {
+                                $address = $result['address'] ?? [];
+
+                                $area = $address['suburb']
+                                    ?? $address['neighbourhood']
+                                    ?? $address['city_district']
+                                    ?? $address['town']
+                                    ?? $address['city']
+                                    ?? $address['village']
+                                    ?? null;
+
+                                $city = $address['city']
+                                    ?? $address['town']
+                                    ?? $address['municipality']
+                                    ?? $address['village']
+                                    ?? null;
+
+                                $state = $address['state'] ?? null;
+                                $country = $address['country'] ?? null;
+
+                                // Build a readable location without
+                                // repeating identical address parts.
+                                $parts = array_unique(array_filter([
+                                    $area,
+                                    $city,
+                                    $state,
+                                    $country,
+                                ]));
+
+                                if (!empty($parts)) {
+                                    $location = implode(', ', $parts);
+                                } elseif (!empty($result['display_name'])) {
+                                    $location = $result['display_name'];
+                                }
+                            }
+                        }
+                    } catch (\Throwable $geoError) {
+                        // Geocoding failure must not prevent login logging.
+                        log_message(
+                            'warning',
+                            'Reverse geocoding failed: ' .
+                            $geoError->getMessage()
+                        );
+                    }
+                }
+            }
+
+            // Insert login log and preserve all audit/status fields.
             $data = [
                 'emailaddress'        => $email,
                 'ipaddress'           => $this->request->getIPAddress(),
                 'latlang'             => $latlang ?: null,
-                'location'            => null,
+                'location'            => $location,
                 'last_attempted_time' => $now,
                 'status'              => $status,
                 'addedBy'             => $userId,
                 'addedDate'           => $now,
                 'updatedBy'           => null,
                 'updatedDate'         => null,
-                'isActive'             => 1
+                'isActive'            => 1,
             ];
 
-            $result = $db->table('login_logs')->insert($data);
+            $inserted = $db->table('login_logs')->insert($data);
 
-            if (!$result) {
+            if (!$inserted) {
                 log_message(
                     'error',
                     'LOGIN LOG INSERT FAILED: ' .
@@ -96,7 +194,7 @@ class AuthController extends Controller
         $email = trim((string) $this->request->getPost('email'));
         $password = (string) $this->request->getPost('password');
 
-        // Get latitude and longitude, if submitted.
+        // Get latitude and longitude from the login form.
         $latlang = $this->request->getPost('latlang');
 
         if (!is_string($latlang) || trim($latlang) === '') {
@@ -115,27 +213,26 @@ class AuthController extends Controller
                     'valid_email' =>
                         'Please enter a valid email address.',
                     'max_length' =>
-                        'Email cannot exceed 254 characters.'
-                ]
+                        'Email cannot exceed 254 characters.',
+                ],
             ],
             'password' => [
                 'rules' => 'required',
                 'errors' => [
                     'required' =>
-                        'Please enter your password.'
-                ]
-            ]
+                        'Please enter your password.',
+                ],
+            ],
         ];
 
         if (!$this->validate($rules)) {
             return view('auth/login', [
                 'validation' => $this->validator,
-                'email'      => $email
+                'email'      => $email,
             ]);
         }
 
         try {
-            // Connect to the configured database.
             $db = \Config\Database::connect();
 
             // Find user by email.
@@ -144,7 +241,7 @@ class AuthController extends Controller
                 ->get()
                 ->getRow();
 
-            // Log unsuccessful login if user does not exist.
+            // Log failed login if user does not exist.
             if (!$user) {
                 $this->saveLoginLog(
                     $email,
@@ -154,7 +251,7 @@ class AuthController extends Controller
 
                 return view('auth/login', [
                     'error' => 'Invalid email or password.',
-                    'email' => $email
+                    'email' => $email,
                 ]);
             }
 
@@ -168,7 +265,7 @@ class AuthController extends Controller
 
                 return view('auth/login', [
                     'error' => 'Invalid email or password.',
-                    'email' => $email
+                    'email' => $email,
                 ]);
             }
 
@@ -182,13 +279,13 @@ class AuthController extends Controller
             // Regenerate session ID after successful authentication.
             session()->regenerate();
 
-            // Preserve existing session variables and add role.
+            // Preserve session variables and role.
             session()->set([
                 'user_id'    => $user->id,
                 'user_name'  => $user->name,
                 'user_email' => $user->email,
                 'role'       => $user->role ?? 'user',
-                'logged_in'  => true
+                'logged_in'  => true,
             ]);
 
             // Preserve existing user_sessions functionality.
@@ -196,10 +293,10 @@ class AuthController extends Controller
                 'user_id'    => $user->id,
                 'user_name'  => $user->name,
                 'user_email' => $user->email,
-                'logged_in'  => 1
+                'logged_in'  => 1,
             ]);
 
-            // Redirect based on user role.
+            // Redirect based on role.
             if (($user->role ?? 'user') === 'admin') {
                 return redirect()->to(base_url('admin/dashboard'));
             }
@@ -214,7 +311,7 @@ class AuthController extends Controller
 
             return view('auth/login', [
                 'error' => 'Unable to login. Please try again.',
-                'email' => $email
+                'email' => $email,
             ]);
         }
     }
@@ -271,8 +368,8 @@ class AuthController extends Controller
                     'min_length' =>
                         'Name must contain at least 2 characters.',
                     'max_length' =>
-                        'Name cannot exceed 100 characters.'
-                ]
+                        'Name cannot exceed 100 characters.',
+                ],
             ],
             'email' => [
                 'rules' => 'required|valid_email|max_length[254]',
@@ -282,8 +379,8 @@ class AuthController extends Controller
                     'valid_email' =>
                         'Please enter a valid email address.',
                     'max_length' =>
-                        'Email cannot exceed 254 characters.'
-                ]
+                        'Email cannot exceed 254 characters.',
+                ],
             ],
             'password' => [
                 'rules' => 'required|min_length[8]',
@@ -291,8 +388,8 @@ class AuthController extends Controller
                     'required' =>
                         'Please create a password.',
                     'min_length' =>
-                        'Password must be at least 8 characters.'
-                ]
+                        'Password must be at least 8 characters.',
+                ],
             ],
             'confirm_password' => [
                 'rules' => 'required|matches[password]',
@@ -300,8 +397,8 @@ class AuthController extends Controller
                     'required' =>
                         'Please confirm your password.',
                     'matches' =>
-                        'Passwords do not match.'
-                ]
+                        'Passwords do not match.',
+                ],
             ],
             'terms' => [
                 'rules' => 'required|in_list[1]',
@@ -309,16 +406,16 @@ class AuthController extends Controller
                     'required' =>
                         'Please accept the Terms & Conditions.',
                     'in_list' =>
-                        'Please accept the Terms & Conditions.'
-                ]
-            ]
+                        'Please accept the Terms & Conditions.',
+                ],
+            ],
         ];
 
         if (!$this->validate($rules)) {
             return view('auth/register', [
                 'validation' => $this->validator,
                 'name'       => $name,
-                'email'      => $email
+                'email'      => $email,
             ]);
         }
 
@@ -335,7 +432,7 @@ class AuthController extends Controller
                     'Password must contain an uppercase letter, ' .
                     'a lowercase letter, a number, and a special character.',
                 'name'  => $name,
-                'email' => $email
+                'email' => $email,
             ]);
         }
 
@@ -353,7 +450,7 @@ class AuthController extends Controller
                     'error' =>
                         'An account with this email already exists.',
                     'name'  => $name,
-                    'email' => $email
+                    'email' => $email,
                 ]);
             }
 
@@ -363,7 +460,6 @@ class AuthController extends Controller
                 PASSWORD_DEFAULT
             );
 
-            // Insert new user as a normal user.
             // Public registration must never grant admin privileges.
             $inserted = $db->table('users')->insert([
                 'name'       => $name,
@@ -371,7 +467,7 @@ class AuthController extends Controller
                 'password'   => $hashedPassword,
                 'role'       => 'user',
                 'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
 
             if (!$inserted) {
@@ -379,7 +475,7 @@ class AuthController extends Controller
                     'error' =>
                         'Registration failed. Please try again.',
                     'name'  => $name,
-                    'email' => $email
+                    'email' => $email,
                 ]);
             }
 
@@ -393,7 +489,7 @@ class AuthController extends Controller
                 'error' =>
                     'Registration failed. Please try again.',
                 'name'  => $name,
-                'email' => $email
+                'email' => $email,
             ]);
         }
 
