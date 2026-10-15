@@ -1,4 +1,3 @@
-
 <?= $this->extend('layout/main') ?>
 <?= $this->section('content') ?>
 
@@ -257,7 +256,9 @@
 }
 
 /* =========================================================
-   HERO - REMOVE TOP SPACE AND ENLARGE IMAGE
+   HERO - POSITION IMAGE BESIDE THE TEXT
+   Only adjusts desktop image positioning.
+   Existing HTML and functionality are preserved.
 ========================================================= */
 
 @media (min-width: 801px) {
@@ -267,26 +268,36 @@
     }
 
     .hero > .wrap {
-        grid-template-columns: 0.85fr 1.15fr !important;
-        align-items: start !important;
+        grid-template-columns: 0.95fr 1.05fr !important;
+        align-items: center !important;
+        gap: 0 !important;
         padding-top: 0 !important;
     }
 
     .hero > .wrap > div:first-child {
-        padding-top: 70px !important;
+        padding-top: 0 !important;
     }
 
     .hero .hero-art {
-        align-items: flex-start !important;
+        align-items: center !important;
         justify-content: center !important;
         min-height: 0 !important;
+        width: 100% !important;
         margin-top: 0 !important;
         transform: none !important;
     }
 
     .hero .hero-art .hero-photo {
-        max-width: min(760px, 100%) !important;
-        margin-top: 0 !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        max-width: 520px !important;
+        max-height: none !important;
+        margin: 0 auto !important;
+        transform: none !important;
+        object-fit: contain !important;
     }
 }
 
