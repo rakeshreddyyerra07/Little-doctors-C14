@@ -26,7 +26,7 @@
                 <td><?= esc($l['id']) ?></td>
                 <td><?= esc(date('d M Y, h:i A', strtotime($l['last_attempted_time']))) ?></td>
                 <td><?= esc($l['emailaddress']) ?></td>
-                <td><span class="badge <?= esc($l['status']) ?>"><?= esc(ucfirst($l['status'])) ?></span></td>
+                <td><span class="badge <?= esc(strtolower($l['status'])) ?>"><?= esc(ucfirst(strtolower($l['status']))) ?></span></td>
                 <td><?= esc($l['ipaddress']) ?></td>
                 <td><?= esc($l['location'] ?: '-') ?></td>
                 <td><?= esc($l['latlang'] ?: '-') ?></td>

@@ -34,7 +34,7 @@
             <tr>
                 <td><?= esc(date('d M Y, h:i A', strtotime($r['last_attempted_time']))) ?></td>
                 <td><?= esc($r['emailaddress']) ?></td>
-                <td><span class="badge <?= esc($r['status']) ?>"><?= esc(ucfirst($r['status'])) ?></span></td>
+                <td><span class="badge <?= esc(strtolower($r['status'])) ?>"><?= esc(ucfirst(strtolower($r['status']))) ?></span></td>
                 <td><?= esc($r['ipaddress']) ?></td>
                 <td><?= esc($r['location'] ?: '-') ?></td>
             </tr>

@@ -9,14 +9,10 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 
 $routes->get('/login', 'AuthController::login');
-$routes->post('/login', 'AuthController::login', [
-    'filter' => ['authvalidate:login', 'loginlog']
-]);
+$routes->post('/login', 'AuthController::login');
 
 $routes->get('/register', 'AuthController::register');
-$routes->post('/register', 'AuthController::register', [
-    'filter' => 'authvalidate:register'
-]);
+$routes->post('/register', 'AuthController::register');
 
 // Forgot / reset password
 $routes->get('/forgot-password', 'PasswordReset::forgotForm');
