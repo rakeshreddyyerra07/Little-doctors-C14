@@ -185,3 +185,20 @@ textarea:focus, select:focus {
         transform: none !important;
     }
 }
+
+
+/* =========================================================
+   REMOVE HOVER BOX-SHADOW
+   Home page + About page
+   Preserves existing functionality and animations
+========================================================= */
+
+@media (hover: hover) {
+    #about .trust-item:hover,
+    #about .trust-item .ic:hover,
+    .about-section .trust-item:hover,
+    .about-section .trust-item .ic:hover,
+    .trust-item:hover {
+        box-shadow: none !important;
+    }
+}

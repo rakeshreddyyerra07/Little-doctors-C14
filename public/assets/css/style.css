@@ -161,11 +161,25 @@ footer.site .brand{justify-content:center; margin-bottom:10px}
 
 
 /* =========================================================
-   NEW - Home page + About page
-   Removes the hover box-shadow on the "Why parents trust"
-   cards (Safe & Supervised, Educational & Fun, Expert
-   Guidance, Proven Impact).
+   REMOVE HOVER SHADOWS
+   Home page: Why parents trust Little Doctors
+   About page: About Us section
+   Does not change other sections or functionality.
 ========================================================= */
-.trust-item:hover {
+
+/* Home page About section */
+#about,
+#about:hover,
+#about .trust-grid,
+#about .trust-grid:hover,
+#about .trust-item,
+#about .trust-item:hover,
+#about .trust-item .ic,
+#about .trust-item .ic:hover,
+
+/* About page sections using this class */
+.about-section,
+.about-section:hover,
+.about-section *:hover {
     box-shadow: none !important;
 }
