@@ -52,6 +52,7 @@ $routes->post('/contact/send', 'Contact::send');
 // Admin panel
 $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
     $routes->get('/', 'Admin::index');
+    $routes->get('dashboard', 'Admin::index');
     $routes->get('users', 'Admin::users');
     $routes->get('logs', 'Admin::logs');
 
