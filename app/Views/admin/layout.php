@@ -15,6 +15,10 @@
             --bg-blue: #f1f7fd;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -22,32 +26,115 @@
             color: var(--navy);
         }
 
+        /* Admin Header */
         .top {
             background: var(--navy);
             color: #fff;
-            padding: 14px 24px;
+            padding: 10px 24px;
             display: flex;
-            gap: 20px;
+            justify-content: space-between;
             align-items: center;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
-        .top a {
+        .top .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             color: #fff;
             text-decoration: none;
-            opacity: .85;
-        }
-
-        .top a:hover {
-            opacity: 1;
-        }
-
-        .top .brand {
             font-weight: bold;
-            font-size: 18px;
-            margin-right: auto;
+            font-size: 17px;
+            white-space: nowrap;
         }
 
+        .admin-logo {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 8px;
+            padding: 3px;
+        }
+
+        /* Shorter Navigation */
+        .admin-nav {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .admin-nav > a,
+        .dropdown-toggle {
+            color: #fff;
+            font-family: inherit;
+            font-size: 14px;
+            text-decoration: none;
+            background: transparent;
+            border: 0;
+            padding: 10px 0;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .admin-nav > a:hover,
+        .dropdown-toggle:hover {
+            color: var(--teal);
+        }
+
+        /* Dropdown Menus */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle span {
+            margin-left: 4px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 190px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            padding: 6px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            color: var(--navy);
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--bg-blue);
+            color: var(--navy);
+        }
+
+        .nav-dropdown:hover .dropdown-menu,
+        .nav-dropdown:focus-within .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-toggle:focus-visible,
+        .admin-nav a:focus-visible,
+        .dropdown-menu a:focus-visible {
+            outline: 2px solid var(--teal);
+            outline-offset: 3px;
+        }
+
+        /* Main Content */
         .wrap {
             max-width: 1100px;
             margin: 30px auto;
@@ -144,8 +231,7 @@
             cursor: pointer;
         }
 
-        /* Login Logs Pagination - added styles only */
-
+        /* Login Logs Pagination */
         .logs-pagination-wrapper {
             display: flex;
             justify-content: space-between;
@@ -203,6 +289,23 @@
             background: #f9fafb;
         }
 
+        /* Responsive Header and Pagination */
+        @media (max-width: 700px) {
+            .top {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 12px 16px;
+            }
+
+            .admin-nav {
+                gap: 12px;
+            }
+
+            .dropdown-menu {
+                max-width: calc(100vw - 32px);
+            }
+        }
+
         @media (max-width: 600px) {
             .logs-pagination-wrapper {
                 flex-direction: column;
@@ -215,17 +318,50 @@
 <body>
 
 <div class="top">
-    <span class="brand">Little Doctors Admin</span>
 
-    <a href="<?= base_url('admin') ?>">Overview</a>
-    <a href="<?= base_url('admin/slides') ?>">Slides</a>
-    <a href="<?= base_url('admin/content/camps') ?>">Camps</a>
-    <a href="<?= base_url('admin/content/courses') ?>">Courses</a>
-    <a href="<?= base_url('admin/content/testimonials') ?>">Testimonials</a>
-    <a href="<?= base_url('admin/users') ?>">Users</a>
-    <a href="<?= base_url('admin/logs') ?>">Login Logs</a>
-    <a href="<?= base_url('admin/settings') ?>">Settings</a>
-    <a href="<?= base_url('dashboard') ?>">My Dashboard</a>
+    <a href="<?= base_url('admin') ?>" class="brand">
+        <img
+            src="<?= base_url('assets/images/logo.png') ?>"
+            alt="Little Doctors Logo"
+            class="admin-logo"
+        >
+        <span>Little Doctors Admin</span>
+    </a>
+
+    <nav class="admin-nav" aria-label="Admin navigation">
+
+        <a href="<?= base_url('admin') ?>">Overview</a>
+
+        <div class="nav-dropdown">
+            <button type="button" class="dropdown-toggle">
+                Content <span aria-hidden="true">▾</span>
+            </button>
+
+            <div class="dropdown-menu">
+                <a href="<?= base_url('admin/slides') ?>">Home Slides</a>
+                <a href="<?= base_url('admin/content/camps') ?>">Camps</a>
+                <a href="<?= base_url('admin/content/courses') ?>">Courses</a>
+                <a href="<?= base_url('admin/content/testimonials') ?>">
+                    Testimonials
+                </a>
+            </div>
+        </div>
+
+        <div class="nav-dropdown">
+            <button type="button" class="dropdown-toggle">
+                Management <span aria-hidden="true">▾</span>
+            </button>
+
+            <div class="dropdown-menu">
+                <a href="<?= base_url('admin/users') ?>">Users</a>
+                <a href="<?= base_url('admin/logs') ?>">Login Logs</a>
+                <a href="<?= base_url('admin/settings') ?>">Settings</a>
+            </div>
+        </div>
+
+        <a href="<?= base_url('dashboard') ?>">My Dashboard</a>
+
+    </nav>
 </div>
 
 <div class="wrap">
