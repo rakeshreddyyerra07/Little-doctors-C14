@@ -187,18 +187,19 @@ textarea:focus, select:focus {
 }
 
 
-/* =========================================================
-   REMOVE HOVER BOX-SHADOW
-   Home page + About page
-   Preserves existing functionality and animations
-========================================================= */
 
+/* Remove hover shadows on About page trust cards */
+#about .trust-item,
+#about .trust-item:hover,
+#about .trust-item:focus,
+#about .trust-item:active {
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+/* Keep trust card hover animations without shadows */
 @media (hover: hover) {
-    #about .trust-item:hover,
-    #about .trust-item .ic:hover,
-    .about-section .trust-item:hover,
-    .about-section .trust-item .ic:hover,
-    .trust-item:hover {
-        box-shadow: none !important;
+    #about .trust-item:hover {
+        transform: translateY(-8px);
     }
 }
