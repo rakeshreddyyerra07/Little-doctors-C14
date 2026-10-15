@@ -15,21 +15,36 @@ class AuthController extends Controller
         ?string $latlang = null
     ): void {
         log_message(
-            'error',
+            'debug',
             'LOGIN LOG: saveLoginLog called. Status=' . $status
         );
 
         try {
             $db = \Config\Database::connect();
+            $now = date('Y-m-d H:i:s');
 
+            // Find the user ID if this email belongs to an account.
+            $user = $db->table('users')
+                ->select('id')
+                ->where('email', $email)
+                ->get()
+                ->getRow();
+
+            $userId = $user ? $user->id : null;
+
+            // Preserve the existing login log fields and add audit fields.
             $data = [
                 'emailaddress'        => $email,
                 'ipaddress'           => $this->request->getIPAddress(),
                 'latlang'             => $latlang ?: null,
                 'location'            => null,
-                'last_attempted_time' => date('Y-m-d H:i:s'),
+                'last_attempted_time' => $now,
                 'status'              => $status,
-                'addedDate'           => date('Y-m-d H:i:s')
+                'addedBy'             => $userId,
+                'addedDate'           => $now,
+                'updatedBy'           => null,
+                'updatedDate'         => null,
+                'isActive'             => 1
             ];
 
             $result = $db->table('login_logs')->insert($data);
@@ -45,7 +60,7 @@ class AuthController extends Controller
             }
 
             log_message(
-                'error',
+                'debug',
                 'LOGIN LOG INSERT SUCCESS. Insert ID=' .
                 $db->insertID()
             );

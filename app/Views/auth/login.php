@@ -56,6 +56,9 @@
     <form id="loginForm" action="<?= base_url('login') ?>" method="post">
       <?= csrf_field() ?>
 
+      <!-- Added: stores browser latitude and longitude -->
+      <input type="hidden" id="latlang" name="latlang" value="">
+
       <div style="margin-bottom:1.1rem;">
         <label for="email" style="display:block;font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:.35rem;">
           Email
@@ -187,6 +190,41 @@ $(document).ready(function () {
 
         unhighlight: function (element) {
             $(element).removeClass('error');
+        },
+
+        // Added: capture location after form validation succeeds.
+        submitHandler: function (form) {
+            const locationField = document.getElementById('latlang');
+
+            function submitLogin() {
+                HTMLFormElement.prototype.submit.call(form);
+            }
+
+            if (!navigator.geolocation) {
+                submitLogin();
+                return false;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    locationField.value =
+                        position.coords.latitude + ',' +
+                        position.coords.longitude;
+
+                    submitLogin();
+                },
+                function () {
+                    // Login continues if location is denied or unavailable.
+                    submitLogin();
+                },
+                {
+                    enableHighAccuracy: false,
+                    timeout: 5000,
+                    maximumAge: 60000
+                }
+            );
+
+            return false;
         }
     });
 });
