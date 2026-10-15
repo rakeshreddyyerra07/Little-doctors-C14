@@ -27,12 +27,15 @@
         form.filters input, form.filters select { padding:9px; border:1px solid var(--line); border-radius:8px; }
         form.filters button { background:var(--teal); color:#fff; border:0; padding:9px 18px; border-radius:8px; cursor:pointer; }
     </style>
-    <link rel="stylesheet" href="<?= base_url('assets/css/animations.css') ?>">
 </head>
 <body>
 <div class="top">
     <span class="brand">Little Doctors Admin</span>
     <a href="<?= base_url('admin') ?>">Overview</a>
+    <a href="<?= base_url('admin/slides') ?>">Slides</a>
+    <a href="<?= base_url('admin/content/camps') ?>">Camps</a>
+    <a href="<?= base_url('admin/content/courses') ?>">Courses</a>
+    <a href="<?= base_url('admin/content/testimonials') ?>">Testimonials</a>
     <a href="<?= base_url('admin/users') ?>">Users</a>
     <a href="<?= base_url('admin/logs') ?>">Login Logs</a>
     <a href="<?= base_url('admin/settings') ?>">Settings</a>
@@ -41,6 +44,5 @@
 <div class="wrap">
     <?= $this->renderSection('content') ?>
 </div>
-<script src="<?= base_url('assets/js/animations.js') ?>" defer></script>
 </body>
 </html>

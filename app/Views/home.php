@@ -335,11 +335,12 @@ footer.site .brand {
     </a>
 
     <nav class="links">
-      <a href="#lab">Learn <span class="icon-chevron">▾</span></a>
-      <a href="#camps">Camps</a>
-      <a href="#events">Events</a>
-      <a href="#about">About <span class="icon-chevron">▾</span></a>
-      <a href="#stories">Stories</a>
+      <a href="<?= base_url('learn') ?>">Learn <span class="icon-chevron">▾</span></a>
+      <a href="<?= base_url('camps') ?>">Camps</a>
+      <a href="<?= base_url('events') ?>">Events</a>
+      <a href="<?= base_url('about') ?>">About <span class="icon-chevron">▾</span></a>
+      <a href="<?= base_url('stories') ?>">Stories</a>
+      <a href="<?= base_url('contact') ?>">Contact</a>
     </nav>
 
     <div class="nav-actions">

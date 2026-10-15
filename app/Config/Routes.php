@@ -44,7 +44,7 @@ $routes->get('/events', 'Pages::events');
 $routes->get('/about', 'Pages::about');
 $routes->get('/stories', 'Pages::stories');
 
-// Contact Us: display form and submit to the existing send() method
+// Contact Us
 $routes->get('/contact', 'Contact::index');
 $routes->post('/contact', 'Contact::send');
 $routes->post('/contact/send', 'Contact::send');
@@ -58,4 +58,20 @@ $routes->group('admin', ['filter' => 'admin'], static function ($routes) {
     // Site settings: contact details and social media
     $routes->get('settings', 'AdminSettings::index');
     $routes->post('settings', 'AdminSettings::save');
+
+    // Camps, Learning Lab courses, Testimonials
+    $routes->get('content/(:segment)', 'AdminContent::index/$1');
+    $routes->get('content/(:segment)/new', 'AdminContent::form/$1');
+    $routes->get('content/(:segment)/edit/(:num)', 'AdminContent::form/$1/$2');
+    $routes->post('content/(:segment)/save', 'AdminContent::save/$1');
+    $routes->post('content/(:segment)/delete/(:num)', 'AdminContent::delete/$1/$2');
+    $routes->post('content/(:segment)/toggle/(:num)', 'AdminContent::toggle/$1/$2');
+
+    // Home slides
+    $routes->get('slides', 'AdminSlides::index');
+    $routes->get('slides/new', 'AdminSlides::form');
+    $routes->get('slides/edit/(:num)', 'AdminSlides::form/$1');
+    $routes->post('slides/save', 'AdminSlides::save');
+    $routes->post('slides/delete/(:num)', 'AdminSlides::delete/$1');
+    $routes->post('slides/toggle/(:num)', 'AdminSlides::toggle/$1');
 });
