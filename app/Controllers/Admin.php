@@ -8,8 +8,15 @@ class Admin extends BaseController
 {
     public function index()
     {
+        helper('geo');
+
         $db    = \Config\Database::connect();
         $today = date('Y-m-d');
+
+        $recent = $db->table('login_logs')->orderBy('last_attempted_time', 'DESC')
+                     ->limit(10)->get()->getResultArray();
+
+        backfill_log_locations($recent);
 
         $data = [
             'totalUsers'   => $db->table('users')->countAllResults(),
@@ -17,8 +24,7 @@ class Admin extends BaseController
                                  ->where('DATE(last_attempted_time) =', $today)->countAllResults(),
             'failedToday'  => $db->table('login_logs')->where('status', 'failed')
                                  ->where('DATE(last_attempted_time) =', $today)->countAllResults(),
-            'recent'       => $db->table('login_logs')->orderBy('last_attempted_time', 'DESC')
-                                 ->limit(10)->get()->getResultArray(),
+            'recent'       => $recent,
         ];
 
         return view('admin/dashboard', $data);
@@ -35,6 +41,8 @@ class Admin extends BaseController
 
     public function logs()
     {
+        helper('geo');
+
         $model  = new LoginLogModel();
         $status = $this->request->getGet('status');
         $email  = trim((string) $this->request->getGet('email'));
@@ -55,6 +63,8 @@ class Admin extends BaseController
         }
 
         $logs = $model->orderBy('last_attempted_time', 'DESC')->paginate(20);
+
+        backfill_log_locations($logs);
 
         return view('admin/logs', [
             'logs'   => $logs,
