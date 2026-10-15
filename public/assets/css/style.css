@@ -158,3 +158,14 @@ nav.links a:hover{opacity:1; color:var(--teal)}
 footer.site{background:var(--navy-deep); color:#cdd7ee; padding:30px 0; text-align:center; font-size:.85rem}
 footer.site .brand img{filter:brightness(0) invert(1); opacity:.9}
 footer.site .brand{justify-content:center; margin-bottom:10px}
+
+
+/* =========================================================
+   NEW - Home page + About page
+   Removes the hover box-shadow on the "Why parents trust"
+   cards (Safe & Supervised, Educational & Fun, Expert
+   Guidance, Proven Impact).
+========================================================= */
+.trust-item:hover {
+    box-shadow: none !important;
+}
